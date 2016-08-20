@@ -3,12 +3,13 @@ import steam.client
 
 import logging
 
-import config
-import user
-
 VERSION = (2, 0)
 
 logger = logging.getLogger("RelayBot")
+
+import config
+import user
+
 
 class Bot(object):
     def __init__(self):
