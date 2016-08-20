@@ -12,6 +12,9 @@ import relaybot
 logger = logging.getLogger("{}.{}".format(relaybot.logger.name,  __name__))
 
 class User(object):
+    """Handles interaction with Steam, including logging in and reacting to
+    events sent from Steam servers.
+    """
 
     client = steam.client.SteamClient()
 
