@@ -1,6 +1,7 @@
 import argparse
 
 import logging
+import logging.handlers
 
 VERSION = (2, 0)
 
@@ -15,8 +16,8 @@ class Bot(object):
     this. If more than one bot is needed at a time, it should be started from a
     separate copy of the code.
     """
-    def __init__(self):
-        logger = self.configure_logging()
+    def __init__(self, logfilename=None):
+        logger = self.configure_logging(logfilename)
         self.user = None
 
 
@@ -27,7 +28,7 @@ class Bot(object):
         self.user = user.User()
 
 
-    def configure_logging(self):
+    def configure_logging(self, logfilename=None):
         """Creates a root logger, configures it, and returns it.
         """
         root = logging.getLogger("RelayBot")
@@ -39,8 +40,15 @@ class Bot(object):
         console = logging.StreamHandler()
         console.setLevel(logging.DEBUG)
         console.setFormatter(formatter)
-
         root.addHandler(console)
+
+        if logfilename is not None:
+            rfhandler = logging.handlers.RotatingFileHandler(logfilename,
+                        maxBytes=2*1024*1024,
+                        backupCount=8)
+            rfhandler.setLevel(logging.DEBUG)
+            rfhandler.setFormatter(formatter)
+            root.addHandler(rfhandler)
 
         return root
 
@@ -50,10 +58,10 @@ def main():
     Creates a new instance of the bot and runs it.
     """
     parser = argparse.ArgumentParser()
+    parser.add_argument("--logfile", help="rotating log filename")
     args = parser.parse_args()
 
-
-    bot = Bot()
+    bot = Bot(args.logfile)
 
     logger.info("Starting Relay Bot 2.0")
     logger.info("Version: {}.{}".format(VERSION[0], VERSION[1]))

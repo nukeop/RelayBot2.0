@@ -1,4 +1,3 @@
-import gevent
 import steam.client
 import steam.client.builtins.friends
 from steam.core.msg import MsgProto
@@ -62,7 +61,7 @@ class User(object):
     def handle_errors(self, result):
         """Steam-related error callback.
         """
-        logger.error("Error: ", EResult(result))
+        logger.error("Error: ".format(EResult(result)))
 
 
     def auth_code_prompt(self, is_2fa, code_mismatch):
