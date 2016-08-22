@@ -64,7 +64,7 @@ def main():
     bot = Bot(args.logfile)
 
     logger.info("Starting Relay Bot 2.0")
-    logger.info("Version: {}.{}".format(VERSION[0], VERSION[1]))
+    logger.info("Version: %d.%d" % (VERSION[0], VERSION[1]))
 
     bot.initialize()
 
