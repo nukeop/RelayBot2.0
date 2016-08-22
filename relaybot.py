@@ -1,5 +1,4 @@
 import argparse
-import steam.client
 
 import logging
 
@@ -7,7 +6,6 @@ VERSION = (2, 0)
 
 logger = logging.getLogger("RelayBot")
 
-import config
 import user
 
 
@@ -51,6 +49,10 @@ def main():
     """RelayBot 2.0 main entry point.
     Creates a new instance of the bot and runs it.
     """
+    parser = argparse.ArgumentParser()
+    args = parser.parse_args()
+
+
     bot = Bot()
 
     logger.info("Starting Relay Bot 2.0")
