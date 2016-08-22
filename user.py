@@ -1,6 +1,5 @@
 import steam.client
 import steam.client.builtins.friends
-import steam.client.user
 
 from steam.core.msg import MsgProto
 from steam.enums import EResult, EPersonaState, EFriendRelationship
