@@ -84,11 +84,14 @@ class User(object):
         self.change_status(EPersonaState.Online, config.profile_name)
 
     def on_client_friends_list(self, msg):
+        """Prints the list of friends and accepts friend invites when it
+        receives the ClientFriendsList event.
+        """
         logger.info("We have {} friends".format(len(self.friends)))
 
         for friend in self.friends:
             logger.info("Friend: {} ({})".format(friend.name.encode('utf-8'),
-                                                 friend.steam_id)) 
+                                                 friend.steam_id))
 
             # Accept friend invitations
             if friend.relationship == EFriendRelationship.RequestRecipient:
