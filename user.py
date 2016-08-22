@@ -68,6 +68,9 @@ class User(object):
     def auth_code_prompt(self, is_2fa, code_mismatch):
         """Handles 2-factor authentication and Steam Guard.
         """
+        if code_mismatch:
+            logger.error("Invalid authentication code")
+
         if is_2fa:
             code = raw_input("Enter Steam Mobile Authenticator code: ")
             self.client.login(config.user, config.pwd, two_factor_code=code)
