@@ -42,8 +42,8 @@ class User(object):
 
         msg, = self.client.wait_event(EMsg.ClientAccountInfo)
         self.client.wait_event(EMsg.ClientFriendsList)
-        logger.info("Logged in as %s" % msg.body.persona_name)
-        logger.info("SteamID: %s" % repr(self.client.steam_id))
+        logger.info("Logged in as %s", msg.body.persona_name)
+        logger.info("SteamID: %s", repr(self.client.steam_id))
 
         try:
             self.client.run_forever()
@@ -71,7 +71,7 @@ class User(object):
     def handle_errors(self, result):
         """Steam-related error callback.
         """
-        logger.error("Error: %s" % repr(EResult(result)))
+        logger.error("Error: %s", repr(EResult(result)))
 
 
     def auth_code_prompt(self, is_2fa, code_mismatch):
@@ -112,28 +112,29 @@ class User(object):
 
             # Accept friend invitations
             if friend.relationship == EFriendRelationship.RequestRecipient:
-                logger.info("User %s (%d) added me to his/her friends" %
-                            (friend.name, friend.steam_id))
+                logger.info("User %s (%d) added me to his/her friends",
+                            friend.name,
+                            friend.steam_id)
                 self.friends.add(friend.steam_id)
 
     def on_friend_added(self, msg):
         """Informs about new friends being added, or shows any errors.
         """
         if msg.body.eresult != 1:
-            logger.error("Error adding friend %s (%d)" %
-                         (msg.body.persona_name_added,
-                          msg.body.steam_id_added)
+            logger.error("Error adding friend %s (%d)",
+                         msg.body.persona_name_added,
+                         msg.body.steam_id_added
             )
-            logger.error("Eresult: %d" % msg.body.eresult)
+            logger.error("Eresult: %d", msg.body.eresult)
         else:
-            logger.info("%s (%d) is now a friend" %
-                        (msg.body.persona_name_added,
-                         msg.body.steam_id_added))
+            logger.info("%s (%d) is now a friend",
+                        msg.body.persona_name_added,
+                        msg.body.steam_id_added)
 
     def on_chat_invite(self, msg):
         """Logs the invite and joins the chat we were invited to.
         """
-        logger.info("Invited to %s by %s (%s)" % (msg.body.chat_name,
-                                             self.get_name_from_steamid(
-                                                 msg.body.steam_id_patron),
-                                                  msg.body.steam_id_patron))
+        logger.info("Invited to %s by %s (%s)", msg.body.chat_name,
+                    self.get_name_from_steamid(
+                        msg.body.steam_id_patron),
+                    msg.body.steam_id_patron)
