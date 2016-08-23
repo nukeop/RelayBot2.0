@@ -3,6 +3,7 @@ import steam.client.builtins.friends
 
 from steam.core.msg import MsgProto
 from steam.enums import EResult, EPersonaState, EFriendRelationship
+from steam.enums import EChatEntryType
 from steam.enums.emsg import EMsg
 
 
@@ -30,6 +31,7 @@ class User(object):
 
         self.client.on('error', self.handle_errors)
         self.client.on('auth_code_required', self.auth_code_prompt)
+        self.client.on(EMsg.ClientFriendMsgIncoming, self.on_chat_message)
         self.client.on(EMsg.ClientAccountInfo, self.on_account_info)
         self.client.on(EMsg.ClientFriendsList, self.on_client_friends_list)
         self.client.on(EMsg.ClientAddFriendResponse, self.on_friend_added)
@@ -138,3 +140,13 @@ class User(object):
                     self.get_name_from_steamid(
                         msg.body.steam_id_patron),
                     msg.body.steam_id_patron)
+
+    def on_chat_message(self, msg):
+        if msg.body.chat_entry_type == EChatEntryType.Typing:
+            logger.info("%s started typing a message to me",
+                        self.get_name_from_steamid(msg.body.steamid_from))
+
+        if msg.body.chat_entry_type == EChatEntryType.ChatMsg:
+            logger.info("Message from %s: %s",
+                        self.get_name_from_steamid(msg.body.steamid_from),
+                        msg.body.message)
