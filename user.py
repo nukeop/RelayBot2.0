@@ -5,10 +5,11 @@ from steam.core.msg import MsgProto
 from steam.enums import EResult, EPersonaState, EFriendRelationship
 from steam.enums import EChatEntryType
 from steam.enums.emsg import EMsg
-
+from steam.util import proto_fill_from_dict
 
 import logging
 import os
+import time
 
 import config
 import relaybot
@@ -20,7 +21,7 @@ class User(object):
     events sent from Steam servers.
     """
 
-    def __init__(self):
+    def __init__(self, bot):
         logger.info("Creating a User instance")
 
         self.client = steam.client.SteamClient()
@@ -28,6 +29,8 @@ class User(object):
 
         self.friends = steam.client.builtins.friends.SteamFriendlist(
             self.client)
+
+        self.bot = bot
 
         self.client.on('error', self.handle_errors)
         self.client.on('auth_code_required', self.auth_code_prompt)
@@ -47,12 +50,6 @@ class User(object):
         logger.info("Logged in as %s", msg.body.persona_name)
         logger.info("SteamID: %s", repr(self.client.steam_id))
 
-        try:
-            self.client.run_forever()
-        except KeyboardInterrupt:
-            self.client.logout()
-
-
     def change_status(self, persona_state, player_name):
         """Changes user's status according to passed value.
         Can also change profile name.
@@ -69,6 +66,22 @@ class User(object):
         """
         suser = self.client.get_user(steamid, False)
         return suser.name
+
+
+    def join_chat(self, chatroomid):
+        logger.error("Joining group chats is not implemented yet")
+
+
+    def send_msg(self, steamid, msg):
+        """Sends a message to a steam user.
+        """
+        sendMsg = MsgProto(EMsg.ClientFriendMsg)
+        sendMsg.body.steamid = steamid
+        sendMsg.body.chat_entry_type = 1
+        sendMsg.body.message = msg
+        sendMsg.body.rtime32_server_timestamp = int(time.time())
+
+        self.client.send(sendMsg)
 
     def handle_errors(self, result):
         """Steam-related error callback.
@@ -141,6 +154,8 @@ class User(object):
                         msg.body.steam_id_patron),
                     msg.body.steam_id_patron)
 
+        self.join_chat(msg.body.steam_id_chat)
+
     def on_chat_message(self, msg):
         if msg.body.chat_entry_type == EChatEntryType.Typing:
             logger.info("%s started typing a message to me",
@@ -150,3 +165,7 @@ class User(object):
             logger.info("Message from %s: %s",
                         self.get_name_from_steamid(msg.body.steamid_from),
                         msg.body.message)
+
+            for plugin in self.bot.plugins:
+                plugin.private_chat_hook(msg.body.steamid_from,
+                msg.body.message)
