@@ -1,14 +1,14 @@
 import argparse
-
 import logging
 import logging.handlers
+import os
 
 VERSION = (2, 0)
 
 logger = logging.getLogger("RelayBot")
 
+import plugins
 import user
-
 
 class Bot(object):
     """Class initializing and performing high level tasks of the bot. For the
@@ -20,13 +20,40 @@ class Bot(object):
         logger = self.configure_logging(logfilename)
         self.user = None
 
+        self.import_plugins()
+        self.plugins = []
+
+        for plugin in plugins.plugin.Plugin.__subclasses__():
+            plugininst = plugin(self)
+            self.plugins.append(plugininst)
+
+    def import_plugins(self):
+        logger.info("Scanning plugins...")
+        files = os.listdir(os.path.join(os.getcwd(), plugins.__name__))
+        files = [os.path.splitext(x)[0] for x in files if
+                 os.path.splitext(x)[1] == ".py"
+                 and "__init__" not in x]
+
+        for module in files:
+            logger.info("Detected plugin: %s", module)
+            try:
+                __import__("plugins.{}".format(module))
+            except:
+                logger.error("Invalid plugin: {}".format(module))
 
     def initialize(self):
         """Performs initialization that needs to happen after the Bot object is
         constructed.
         """
-        self.user = user.User()
+        self.user = user.User(self)
 
+    def run(self):
+        """Starts the main loop, handles logout on interrupt.
+        """
+        try:
+            self.user.client.run_forever()
+        except KeyboardInterrupt:
+            self.user.client.logout()
 
     def configure_logging(self, logfilename=None):
         """Creates a root logger, configures it, and returns it.
@@ -52,7 +79,6 @@ class Bot(object):
 
         return root
 
-
 def main():
     """RelayBot 2.0 main entry point.
     Creates a new instance of the bot and runs it.
@@ -67,6 +93,7 @@ def main():
     logger.info("Version: %d.%d", VERSION[0], VERSION[1])
 
     bot.initialize()
+    bot.run()
 
 if __name__ == '__main__':
     main()
