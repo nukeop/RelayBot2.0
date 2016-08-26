@@ -39,7 +39,7 @@ class Bot(object):
             try:
                 __import__("plugins.{}".format(module))
             except:
-                logger.error("Invalid plugin: {}".format(module))
+                logger.error("Invalid plugin: %s", module)
 
     def initialize(self):
         """Performs initialization that needs to happen after the Bot object is
