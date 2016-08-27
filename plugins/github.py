@@ -1,5 +1,4 @@
 import github3
-import getpass
 
 import plugin
 
