@@ -38,8 +38,8 @@ class Help(plugin.Plugin):
         """Looks for a plugin and gets its long description.
         """
         result = None
-        for plugin in self.bot.plugins:
-            if type(plugin).__name__ == name:
+        for _plugin in self.bot.plugins:
+            if type(_plugin).__name__ == name:
                 result = plugin.long_desc
                 break
 
