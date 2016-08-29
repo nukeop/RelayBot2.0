@@ -14,7 +14,7 @@ class Help(plugin.Plugin):
     @property
     def long_desc(self):
         return ("!help - shows a list of all available plugins and what they"
-        " do.\n !help <command> - shows detailed information about a command.")
+        " do.\n!help <command> - shows detailed information about a command.")
 
     def private_chat_hook(self, steamid, message):
         if message.startswith(self.command):
@@ -39,8 +39,8 @@ class Help(plugin.Plugin):
         """
         result = None
         for _plugin in self.bot.plugins:
-            if type(_plugin).__name__ == name:
-                result = plugin.long_desc
+            if type(_plugin).__name__.lower() == name.lower():
+                result = _plugin.long_desc
                 break
 
         if result is not None:

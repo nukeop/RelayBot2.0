@@ -5,7 +5,6 @@ from steam.core.msg import MsgProto
 from steam.enums import EResult, EPersonaState, EFriendRelationship
 from steam.enums import EChatEntryType
 from steam.enums.emsg import EMsg
-from steam.util import proto_fill_from_dict
 
 import logging
 import os
@@ -43,7 +42,7 @@ class User(object):
         if self.client.relogin_available:
             self.client.relogin()
         else:
-            self.client.login(config.user, config.pwd)
+            self.client.login(config.STEAM_USER, config.STEAM_PWD)
 
         msg, = self.client.wait_event(EMsg.ClientAccountInfo)
         self.client.wait_event(EMsg.ClientFriendsList)
@@ -75,13 +74,13 @@ class User(object):
     def send_msg(self, steamid, msg):
         """Sends a message to a steam user.
         """
-        sendMsg = MsgProto(EMsg.ClientFriendMsg)
-        sendMsg.body.steamid = steamid
-        sendMsg.body.chat_entry_type = 1
-        sendMsg.body.message = msg
-        sendMsg.body.rtime32_server_timestamp = int(time.time())
+        sendmsg = MsgProto(EMsg.ClientFriendMsg)
+        sendmsg.body.steamid = steamid
+        sendmsg.body.chat_entry_type = 1
+        sendmsg.body.message = msg
+        sendmsg.body.rtime32_server_timestamp = int(time.time())
 
-        self.client.send(sendMsg)
+        self.client.send(sendmsg)
 
     def handle_errors(self, result):
         """Steam-related error callback.
@@ -97,10 +96,10 @@ class User(object):
 
         if is_2fa:
             code = raw_input("Enter Steam Mobile Authenticator code: ")
-            self.client.login(config.user, config.pwd, two_factor_code=code)
+            self.client.login(config.STEAM_USER, config.STEAM_PWD, two_factor_code=code)
         else:
             code = raw_input("Enter Steam Guard code: ")
-            self.client.login(config.user, config.pwd, auth_code=code)
+            self.client.login(config.STEAM_USER, config.STEAM_PWD, auth_code=code)
 
 
     def on_account_info(self, msg):
@@ -111,7 +110,7 @@ class User(object):
             return
 
         logger.info("Received ClientAccountInfo")
-        self.change_status(EPersonaState.Online, config.profile_name)
+        self.change_status(EPersonaState.Online, config.STEAM_PROFILE_NAME)
 
     def on_client_friends_list(self, msg):
         """Prints the list of friends and accepts friend invites when it
@@ -119,11 +118,11 @@ class User(object):
         """
         if msg is None:
             return
-        logger.info("We have {} friends".format(len(self.friends)))
+        logger.info("We have %d friends", len(self.friends))
 
         for friend in self.friends:
-            logger.info("Friend: {} ({})".format(friend.name.encode('utf-8'),
-                                                 friend.steam_id))
+            logger.info("Friend: %s (%d)", friend.name.encode('utf-8'),
+                        friend.steam_id)
 
             # Accept friend invitations
             if friend.relationship == EFriendRelationship.RequestRecipient:
