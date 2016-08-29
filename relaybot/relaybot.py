@@ -29,7 +29,8 @@ class Bot(object):
 
     def import_plugins(self):
         logger.info("Scanning plugins...")
-        files = os.listdir(os.path.join(os.getcwd(), plugins.__name__))
+        files = os.listdir(os.path.join(os.path.dirname(__file__),
+                                        plugins.__name__))
         files = [os.path.splitext(x)[0] for x in files if
                  os.path.splitext(x)[1] == ".py"
                  and "__init__" not in x]
