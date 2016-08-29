@@ -21,12 +21,12 @@ class Github(plugin.Plugin):
     @property
     def description(self):
         return ("An interface between Github and Steam. Lets you check out"
-                "latest changes.")
+                " latest changes.")
 
     @property
     def long_desc(self):
         return ("!github commits - see the last five commits to the main"
-                "branch")
+                " branch")
 
     def private_chat_hook(self, steamid, message):
         if message.startswith(self.command):

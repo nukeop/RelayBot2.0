@@ -40,7 +40,7 @@ class EightBall(plugin.Plugin):
     @property
     def long_desc(self):
         return ("!8ball or !8ball <question> will show a randomly selected"
-        "answer from  a classic well-known list.")
+        " answer from a classic well-known list.")
 
     def private_chat_hook(self, steamid, message):
         if message.startswith(self.command):

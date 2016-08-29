@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 #Credentials to be used when logging in
-user = ""
-pwd = ""
+STEAM_USER = ""
+STEAM_PWD = ""
 
-profile_name = "RelayBot 2.0™"
+STEAM_PROFILE_NAME = "RelayBot 2.0™"
 
 #API key (can be obtained from Steam)
-api_key = ""
+STEAM_API_KEY = ""
 
-# List of 64-bit ids of users who are allowed to connect to the terminal
-authorized_users = []
+# List of 64-bit ids of users who are allowed to connect to the terminal and
+# perform other admin functions 
+AUTHORIZED_USERS = []

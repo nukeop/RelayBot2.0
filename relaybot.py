@@ -17,7 +17,7 @@ class Bot(object):
     separate copy of the code.
     """
     def __init__(self, logfilename=None):
-        logger = self.configure_logging(logfilename)
+        self.configure_logging(logfilename)
         self.user = None
 
         self.import_plugins()
@@ -38,8 +38,9 @@ class Bot(object):
             logger.info("Detected plugin: %s", module)
             try:
                 __import__("plugins.{}".format(module))
-            except:
+            except Exception as e:
                 logger.error("Invalid plugin: %s", module)
+                logger.error(str(e))
 
     def initialize(self):
         """Performs initialization that needs to happen after the Bot object is
