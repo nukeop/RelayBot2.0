@@ -1,0 +1,27 @@
+a, a:active, a:focus, a:hover {
+                          color: #31a2f2;
+                      }
+
+footer {
+    font-family: Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-variant: small-caps;
+}
+
+header {
+    background-image: url('../media/header-bg.jpg');
+}
+
+.btn-xl {
+    background-color: #31a2f2;
+    border-color: #ffffff;
+}
+
+.btn-xl:hover, btn-xl:focus {
+    background-color: #31a2f2;
+    border-color: #222222;
+}
+
+.btn-xl:active {
+    background-color: #2c91d9;
+    border-color: #222222;
+}
