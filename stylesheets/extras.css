@@ -13,15 +13,35 @@ header {
 
 .btn-xl {
     background-color: #31a2f2;
-    border-color: #ffffff;
+    border-color: #31a2f2;
 }
 
-.btn-xl:hover, btn-xl:focus {
+.btn-xl:hover, .btn-xl:focus {
     background-color: #31a2f2;
-    border-color: #222222;
+    border-color: #31a2f2;
 }
 
 .btn-xl:active {
     background-color: #2c91d9;
-    border-color: #222222;
+    border-color: #2c91d9;
+}
+
+.navbar-custom .navbar-brand,
+.navbar-custom .navbar-brand:hover,
+.navbar-custom .navbar-brand:active,
+.navbar-custom .navbar-brand:focus{
+    color: #2c91d9;
+    text-shadow: 2px 2px #222222;
+    font-family: "Audiowide", "Helvetica Neue", Helvetica, Arial, cursive;
+}
+
+.text-primary {
+    color: #2c91d9;
+}
+
+::-moz-selection {
+  background: #31a2f2;
+}
+::selection {
+  background: #31a2f2;
 }
