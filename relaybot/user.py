@@ -20,10 +20,10 @@ class User(object):
     events sent from Steam servers.
     """
 
-    def __init__(self, bot):
+    def __init__(self, bot, client):
         logger.info("Creating a User instance")
 
-        self.client = steam.client.SteamClient()
+        self.client = client
         self.client.set_credential_location(os.getcwd())
 
         self.friends = steam.client.builtins.friends.SteamFriendlist(
@@ -44,9 +44,10 @@ class User(object):
         else:
             self.client.login(config.STEAM_USER, config.STEAM_PWD)
 
-        msg, = self.client.wait_event(EMsg.ClientAccountInfo)
+        msg = self.client.wait_event(EMsg.ClientAccountInfo)
+
         self.client.wait_event(EMsg.ClientFriendsList)
-        logger.info("Logged in as %s", msg.body.persona_name)
+        logger.info("Logged in as %s", msg[0].body.persona_name)
         logger.info("SteamID: %s", repr(self.client.steam_id))
 
     def change_status(self, persona_state, player_name):

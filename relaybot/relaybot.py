@@ -3,6 +3,8 @@ import logging
 import logging.handlers
 import os
 
+import steam.client
+
 VERSION = (2, 0)
 
 logger = logging.getLogger("RelayBot")
@@ -47,7 +49,7 @@ class Bot(object):
         """Performs initialization that needs to happen after the Bot object is
         constructed.
         """
-        self.user = user.User(self)
+        self.user = user.User(self, steam.client.SteamClient())
 
     def run(self):
         """Starts the main loop, handles logout on interrupt.
