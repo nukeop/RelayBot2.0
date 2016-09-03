@@ -4,4 +4,4 @@ python:
 
 install: "pip install -r requirements.txt"
 
-script: nosetests tests
+script: yes | nosetests tests -s
