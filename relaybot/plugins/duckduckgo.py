@@ -33,7 +33,8 @@ class DuckDuckGoDefine(plugin.Plugin):
     def enter_group_chat_hook(self, groupid):
         pass
 
-    def ddg_def(self, term):
+    @staticmethod
+    def ddg_def(term):
         url = DDG_API_URL.format(term)
         text = requests.get(url).text
         parsed = json.loads(text)
@@ -48,9 +49,9 @@ class DuckDuckGoDefine(plugin.Plugin):
             if len(related) < 1:
                 return "No information about term {}.".format(term)
 
-            for i, r in enumerate(related):
+            for i, entry in enumerate(related):
                 try:
-                    relatedstr += "({}) {}\n".format(i+1, r['Text'])
+                    relatedstr += "({}) {}\n".format(i+1, entry['Text'])
                 except KeyError:
                     pass
 
