@@ -1,4 +1,5 @@
 gevent
+eventemitter
 steam
 github3.py
 mock
