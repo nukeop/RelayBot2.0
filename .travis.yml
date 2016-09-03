@@ -2,6 +2,6 @@ language: python
 python:
   - "2.7"
 
-install: "pip install -r requirements.txt"
+install: "virtualenv .;source bin/activate;pip install -r requirements.txt"
 
 script: yes | nosetests tests -s
