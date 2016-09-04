@@ -37,14 +37,16 @@ class Help(plugin.Plugin):
     def get_long_desc(self, name):
         """Looks for a plugin and gets its long description.
         """
+        plugin_name = None
         result = None
         for _plugin in self.bot.plugins:
             if type(_plugin).__name__.lower() == name.lower():
+                plugin_name = type(_plugin).__name__
                 result = _plugin.long_desc
                 break
 
         if result is not None:
-            result = "\nHelp text for {}:\n{}".format(type(_plugin).__name__,
+            result = "\nHelp text for {}:\n{}".format(plugin_name,
                                                       result)
         else:
             result = "No such plugin could be found."
