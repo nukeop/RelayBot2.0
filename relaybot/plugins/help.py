@@ -44,7 +44,8 @@ class Help(plugin.Plugin):
                 break
 
         if result is not None:
-            result = "\nHelp text for {}:\n{}".format(name, result)
+            result = "\nHelp text for {}:\n{}".format(type(_plugin).__name__,
+                                                      result)
         else:
             result = "No such plugin could be found."
         return result
