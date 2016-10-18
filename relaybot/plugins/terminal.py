@@ -22,8 +22,7 @@ class Terminal(plugin.Plugin):
     @property
     def long_desc(self):
         return ("!terminal <command> - runs everything after the command"
-                "itself as a subprocess. Separate arguments with double"
-                "colons (::).") 
+                "itself as a subprocess.")
 
     def private_chat_hook(self, steamid, message):
         if message.startswith(self.command):
@@ -45,6 +44,6 @@ class Terminal(plugin.Plugin):
                 if len(output[0]) > 0:
                     self.bot.user.send_msg(steamid, output[0])
                 else:
-                    self.bot.user.send_msg(steamid, output[0])
+                    self.bot.user.send_msg(steamid, "No output.")
             else:
                 self.bot.user.send_msg(steamid, "No arguments.")
