@@ -7,8 +7,9 @@ import steam.client
 
 VERSION = (2, 0)
 
-logger = logging.getLogger("RelayBot")
+logger = logging.getLogger()
 
+import database
 import plugins
 import user
 
@@ -21,6 +22,8 @@ class Bot(object):
     def __init__(self, logfilename=None):
         self.configure_logging(logfilename)
         self.user = None
+
+        self.database = database.Database('relaybot.db')
 
         self.import_plugins()
         self.plugins = []
@@ -62,8 +65,10 @@ class Bot(object):
     def configure_logging(self, logfilename=None):
         """Creates a root logger, configures it, and returns it.
         """
-        root = logging.getLogger("RelayBot")
+        root = logging.getLogger()
         root.setLevel(logging.DEBUG)
+
+        logging.getLogger('SteamClient').setLevel(logging.WARNING)
 
         formatter = logging.Formatter("[%(levelname)s] - %(asctime)s - %(name)s -"
         " %(message)s")

@@ -13,18 +13,17 @@ class Database(object):
 
 
     def select(self, table, fields, condition=None):
-        query = ""
         if condition is not None:
             self.cursor.execute("SELECT {} FROM {} WHERE {}".format(fields, table,
                                                             condition))
         else:
-            self.cursor.execute("SELECT {} FROM {}")
+            self.cursor.execute("SELECT {} FROM {}".format(fields, table))
 
         return self.cursor.fetchall()
 
 
     def create_table(self, table, cols):
-        query = "CREATE TABLE {}({})".format()
+        query = "CREATE TABLE {}({})".format(table, cols)
         self.cursor.execute(query)
         self.conn.commit()
 
