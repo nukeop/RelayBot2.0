@@ -12,7 +12,7 @@ import time
 
 import config
 import relaybot
-logger = logging.getLogger("{}.{}".format(relaybot.logger.name, __name__))
+logger = logging.getLogger(__name__)
 
 
 class User(object):
