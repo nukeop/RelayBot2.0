@@ -1,0 +1,1 @@
+- Version 2.0: Core functionality. Still being developed. Will be considered complete when the bot has all the functions of the previous version.
