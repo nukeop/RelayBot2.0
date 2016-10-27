@@ -40,12 +40,21 @@ class Joke(plugin.Plugin):
             rows = self.bot.database.select("jokes", "*")
             if len(rows)<1:
                 self.bot.user.send_msg(steamid, "No jokes in the database.")
+            else:
+                row = random.choice(rows)
+                self.bot.user.send_msg(steamid, "Joke #{} by {}:\n"
+                                       "{}".format(row[0], row[2], row[1]))
         elif message.startswith(self.add_command):
             tokens = message.split()
             if len(tokens)<2:
                 self.bot.user.send_msg(steamid, "No content. Joke not added.")
             else:
-                self.bot.database.insert("jokes", "content, author", "'{}','{}'".format(" ".join(tokens[1:]), steamid))
+                self.bot.database.insert("jokes", "content, author", "?, ?",
+                                         (
+                                             " ".join(tokens[1:]),
+                                             self.bot.user.get_name_from_steamid(steamid)
+                                         )
+                )
                 self.bot.user.send_msg(steamid, "Joke added.")
         elif message.startswith(self.rate_command):
             tokens = message.split()

@@ -28,8 +28,7 @@ class Database(object):
         self.conn.commit()
 
 
-    def insert(self, table, columns, values):
+    def insert(self, table, columns, values, params):
         query = "INSERT INTO {}({}) VALUES ({})".format(table, columns, values)
-        print query
-        self.cursor.execute(query)
+        self.cursor.execute(query, params)
         self.conn.commit()
