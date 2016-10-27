@@ -102,7 +102,9 @@ def main():
     logger.info("Version: %d.%d", VERSION[0], VERSION[1])
 
     bot.initialize()
+
     bot.run()
+
 
 if __name__ == '__main__':
     main()

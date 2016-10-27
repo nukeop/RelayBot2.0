@@ -9,5 +9,9 @@ STEAM_PROFILE_NAME = "RelayBot 2.0™"
 STEAM_API_KEY = ""
 
 # List of 64-bit ids of users who are allowed to connect to the terminal and
-# perform other admin functions 
+# perform other admin functions
 AUTHORIZED_USERS = []
+
+# List of 64-bit ids of users who will not be authorized to interact with the
+# bot. It will ignore all their messages.
+IGNORED_USERS = []
