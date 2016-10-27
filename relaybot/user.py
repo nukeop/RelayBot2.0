@@ -166,6 +166,7 @@ class User(object):
                         self.get_name_from_steamid(msg.body.steamid_from),
                         msg.body.message)
 
-            for plugin in self.bot.plugins:
-                plugin.private_chat_hook(msg.body.steamid_from,
-                msg.body.message)
+            if msg.body.steamid_from not in config.IGNORED_USERS:
+                for plugin in self.bot.plugins:
+                    plugin.private_chat_hook(msg.body.steamid_from,
+                                             msg.body.message)
