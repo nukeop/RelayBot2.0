@@ -27,7 +27,7 @@ class Terminal(plugin.Plugin):
     def private_chat_hook(self, steamid, message):
         if message.startswith(self.command):
 
-            if not steamid in config.AUTHORIZED_USERS:
+            if not steamid in config["AUTHORIZED_USERS"]:
                 self.bot.user.send_msg(steamid, "Unauthorized user. Access"
                                        " denied.")
                 return
