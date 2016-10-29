@@ -10,7 +10,7 @@ import logging
 import os
 import time
 
-import config
+from config import config
 import relaybot
 logger = logging.getLogger(__name__)
 
@@ -42,7 +42,7 @@ class User(object):
         if self.client.relogin_available:
             self.client.relogin()
         else:
-            self.client.login(config.STEAM_USER, config.STEAM_PWD)
+            self.client.login(config["STEAM_USER"], config["STEAM_PWD"])
 
         msg = self.client.wait_event(EMsg.ClientAccountInfo)
 
@@ -97,10 +97,10 @@ class User(object):
 
         if is_2fa:
             code = raw_input("Enter Steam Mobile Authenticator code: ")
-            self.client.login(config.STEAM_USER, config.STEAM_PWD, two_factor_code=code)
+            self.client.login(config["STEAM_USER"], config["STEAM_PWD"], two_factor_code=code)
         else:
             code = raw_input("Enter Steam Guard code: ")
-            self.client.login(config.STEAM_USER, config.STEAM_PWD, auth_code=code)
+            self.client.login(config["STEAM_USER"], config["STEAM_PWD"], auth_code=code)
 
 
     def on_account_info(self, msg):
@@ -111,7 +111,7 @@ class User(object):
             return
 
         logger.info("Received ClientAccountInfo")
-        self.change_status(EPersonaState.Online, config.STEAM_PROFILE_NAME)
+        self.change_status(EPersonaState.Online, config["STEAM_PROFILE_NAME"])
 
     def on_client_friends_list(self, msg):
         """Prints the list of friends and accepts friend invites when it
@@ -168,7 +168,7 @@ class User(object):
 
             # Do not interact with ignored users - just log what they're
             # sending
-            if msg.body.steamid_from not in config.IGNORED_USERS:
+            if msg.body.steamid_from not in config["IGNORED_USERS"]:
                 for plugin in self.bot.plugins:
                     plugin.private_chat_hook(msg.body.steamid_from,
                                              msg.body.message)

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import logging
 import random
 
@@ -42,10 +43,24 @@ class Joke(plugin.Plugin):
                 self.bot.user.send_msg(steamid, "No jokes in the database.")
             else:
                 row = random.choice(rows)
-                self.bot.user.send_msg(steamid, "Joke #{} by {}:\n"
-                                       "{}".format(row[0], row[2], row[1]))
+
+                ratings = [int(x[0]) for x in self.bot.database.select(
+                    "jokes_ratings",
+                    "rating",
+                    "jokeid={}".format(row[0])
+                )]
+
+                rating = 0
+                if len(ratings) > 0:
+                    rating = sum(ratings)/float(len(ratings))
+                rating = Joke.rating_to_stars(rating)
+
+
+                self.bot.user.send_msg(steamid, "Joke #{} by {} ({}):\n"
+                                       "{}".format(row[0], row[2], rating,
+                                                   row[1]))
         elif message.startswith(self.add_command):
-            tokens = message.split()
+            tokens = message.strip().strip('\x00').split()
             if len(tokens)<2:
                 self.bot.user.send_msg(steamid, "No content. Joke not added.")
             else:
@@ -57,14 +72,31 @@ class Joke(plugin.Plugin):
                 )
                 self.bot.user.send_msg(steamid, "Joke added.")
         elif message.startswith(self.rate_command):
-            tokens = message.split()
+            tokens = message.strip().strip('\x00').split()
             if len(tokens)!=3:
                 self.bot.user.send_msg(steamid, "Incorrect number of"
                                        " arguments. You have to supply the"
                                        " id of the joke you want to rate,"
                                        " and a rating.")
             else:
-                self.bot.user.send_msg(steamid, "Rate command used")
+                if int(tokens[2])>5 or int(tokens[2])<0:
+                    self.bot.user.send_msg(steamid, "Rating must be between 0"
+                                           " and 5.")
+                    return
+
+                row = self.bot.database.select("jokes", "*",
+                                                "id={}".format(tokens[1]))
+                if len(row)<1:
+                    return
+
+                self.bot.database.insert(
+                    "jokes_ratings",
+                    "jokeid, rating",
+                    "?, ?",
+                    (tokens[1], tokens[2])
+                )
+
+                self.bot.user.send_msg(steamid, "Joke rated.")
 
     def init_db(self):
         tables = self.bot.database.select("sqlite_master", "name",
@@ -95,3 +127,8 @@ class Joke(plugin.Plugin):
                                            "FOREIGN KEY(jokeid) REFERENCES"
                                            " jokes(id)"
             )
+
+    @staticmethod
+    def rating_to_stars(rating):
+        rating = int(rating)
+        return ("★" * rating) + ("☆"*(5-rating))
