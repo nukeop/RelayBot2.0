@@ -2,10 +2,10 @@ import logging
 import shlex
 import subprocess
 
-import config
+from config import config
 import plugin
 import relaybot
-logger = logging.getLogger("{}.{}".format(relaybot.logger.name, __name__))
+logger = logging.getLogger(__name__)
 
 class Terminal(plugin.Plugin):
     """Lets authorized users execute arbitrary commands on the same machine
@@ -23,6 +23,12 @@ class Terminal(plugin.Plugin):
     def long_desc(self):
         return ("!terminal <command> - runs everything after the command"
                 "itself as a subprocess.")
+
+    @property
+    def commands(self):
+        return {
+            "!terminal": "runs command on the machine the bot is on"
+        }
 
     def private_chat_hook(self, steamid, message):
         if message.startswith(self.command):

@@ -28,6 +28,12 @@ class Github(plugin.Plugin):
         return ("!github commits - see the last five commits to the main"
                 " branch")
 
+    @property
+    def commands(self):
+        return {
+            "!github commits": "see the last five commits to the main branch"
+        }
+
     def private_chat_hook(self, steamid, message):
         if message.startswith(self.command):
             if 'commits' in message:

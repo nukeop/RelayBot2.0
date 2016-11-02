@@ -28,6 +28,12 @@ class UrbanDictionary(plugin.Plugin):
                 "\n!urban <number> <term> - show <number> definitions for"
                 " a term, or all of them if there are less than <number>.")
 
+    @property
+    def commands(self):
+        return {
+            "!urban": "shows definitions from Urban Dictionary"
+        }
+
     def private_chat_hook(self, steamid, message):
         if message.startswith(self.command):
 

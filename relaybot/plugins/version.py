@@ -20,10 +20,16 @@ class Version(plugin.Plugin):
         return ("!version will show the major and minor versions as well as"
                 " the last line added to the changelog.")
 
+    @property
+    def commands(self):
+        return {
+            "!version": "shows program version and the latest changelog entry"
+        }
+
 
     def private_chat_hook(self, steamid, message):
         if message.startswith(self.command):
-            versionstr = "{}.{}".format(VERSION[0], VERSION[1])
+            versionstr = "RelayBot v{}.{}".format(VERSION[0], VERSION[1])
             with open('relaybot/changelog.md', 'r') as cl:
                 lines = cl.readlines()
                 versionstr += '\n'

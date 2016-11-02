@@ -42,6 +42,12 @@ class EightBall(plugin.Plugin):
         return ("!8ball or !8ball <question> will show a randomly selected"
         " answer from a classic well-known list.")
 
+    @property
+    def commands(self):
+        return {
+            "!8ball": "shows an answer to a yes/no question"
+        }
+
     def private_chat_hook(self, steamid, message):
         if message.startswith(self.command):
             self.bot.user.send_msg(steamid, random.choice(self.answers))

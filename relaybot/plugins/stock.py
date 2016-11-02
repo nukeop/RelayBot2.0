@@ -19,6 +19,12 @@ class Stock(plugin.Plugin):
     def long_desc(self):
         return ("!stock <symbol> - return current stock value.")
 
+    @property
+    def commands(self):
+        return {
+            "!stock": "shows current stock value"
+        }
+
     def private_chat_hook(self, steamid, message):
         if message.startswith(self.command):
             self.bot.user.send_msg(steamid, self.get_stock(

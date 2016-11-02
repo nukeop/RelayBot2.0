@@ -22,6 +22,12 @@ class DuckDuckGoDefine(plugin.Plugin):
         " DuckDuckGo. If definition cannot be found, instead return related"
         " terms. If there are no related terms, inform about failure.")
 
+    @property
+    def commands(self):
+        return {
+            "!ddg": "shows definitions from DuckDuckGo"
+        }
+
     def private_chat_hook(self, steamid, message):
         if message.startswith(self.command):
             self.bot.user.send_msg(steamid, self.ddg_def(
