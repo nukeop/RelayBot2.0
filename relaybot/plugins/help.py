@@ -15,9 +15,9 @@ class Help(plugin.Plugin):
     @property
     def long_desc(self):
         return ("!help - shows a list of all available commands and what they"
-        " do.\n!help <command/plugin name> - shows detailed information about"
-        "a command or a plugin.\n!plugins - show a list of all plugins and"
-        " their descriptions.")
+        " do.\n!plugins <command/plugin name> - shows detailed information about"
+        "a plugin.\n!plugins - show a list of all plugins and their"
+        " descriptions.")
 
     @property
     def commands(self):
