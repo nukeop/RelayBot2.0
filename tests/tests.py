@@ -20,37 +20,7 @@ def sanity_test():
 
 class Plugin_Tests(unittest.TestCase):
 
-    def setUp(self):
-        self.plugin = relaybot.plugins.plugin.Plugin(None)
-
-    @status
-    def test_description(self):
-        with assert_raises(NotImplementedError) as nie:
-            desc = self.plugin.description
-
-    @status
-    def test_long_desc(self):
-        with assert_raises(NotImplementedError) as nie:
-            desc = self.plugin.long_desc
-
-    @status
-    def test_init_hook(self):
-        assert_raises(NotImplementedError, self.plugin.init_hook)
-
-    @status
-    def test_private_chat_hook(self):
-        assert_raises(NotImplementedError, self.plugin.private_chat_hook, None,
-                      None)
-
-    @status
-    def test_group_chat_hook(self):
-        assert_raises(NotImplementedError, self.plugin.group_chat_hook, None,
-                      None, None)
-
-    @status
-    def test_enter_group_chat_hook(self):
-        assert_raises(NotImplementedError, self.plugin.enter_group_chat_hook,
-                      None)
+    pass
 
 
 class User_Tests(unittest.TestCase):
