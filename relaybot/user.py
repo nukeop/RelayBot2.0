@@ -1,7 +1,7 @@
 import steam.client
 import steam.client.builtins.friends
 
-from steam.core.msg import MsgProto
+from steam.core.msg import MsgProto, Msg
 from steam.enums import EResult, EPersonaState, EFriendRelationship
 from steam.enums import EChatEntryType
 from steam.enums.emsg import EMsg
@@ -13,6 +13,29 @@ import time
 from config import config
 import relaybot
 logger = logging.getLogger(__name__)
+
+
+class MsgClientJoinChat(object):
+    def __init__(self, sidc):
+        self.SteamIdChat = sidc
+        self.IsVoiceSpeaker = False
+
+    def serialize(self):
+        print self.SteamIdChat
+        import StringIO
+        out = StringIO.StringIO()
+        hsteamidchat = format(self.SteamIdChat, '02x')
+        if len(hsteamidchat)%4!=0:
+            hsteamidchat = (len(hsteamidchat)%4)*'0' + hsteamidchat
+
+        newstr = ""
+        for i in range(len(hsteamidchat), 2, -2):
+            newstr += hsteamidchat[i-2:i]
+
+        hsteamidchat = bytearray.fromhex(newstr)
+        out.write(hsteamidchat)
+        out.write("\x00")
+        return out.getvalue()
 
 
 class User(object):
@@ -69,8 +92,11 @@ class User(object):
 
 
     def join_chat(self, chatroomid):
-        logger.error("Joining group chats is not implemented yet")
-
+        """Joins a group chat given its id.
+        """
+        msg = Msg(EMsg.ClientJoinChat, extended=True)
+        msg.body = MsgClientJoinChat(chatroomid)
+        self.client.send(msg)
 
     def send_msg(self, steamid, msg):
         """Sends a message to a steam user.
