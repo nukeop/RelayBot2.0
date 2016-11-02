@@ -2,4 +2,5 @@
 import json
 import os
 
-config = json.loads(''.join(open(os.path.join(os.getcwd(),'relaybot','config.json'), 'r').readlines()))
+config_path = os.path.join(os.getcwd(),'relaybot','config.json')
+config = json.loads(''.join(open(config_path, 'r').readlines()))

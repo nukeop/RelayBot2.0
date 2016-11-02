@@ -35,6 +35,14 @@ class Joke(plugin.Plugin):
                 " joke to the database.\n!ratejoke <id> <rating (0-5)> -"
                 "lets you rate a joke.")
 
+    @property
+    def commands(self):
+        return {
+            "!joke": "shows a random joke",
+            "!addjoke": "adds a new joke to the database",
+            "!ratejoke <id> <score>": "rates a joke from 0 to 5 stars"
+        }
+
 
     def private_chat_hook(self, steamid, message):
         if message.startswith(self.use_command):

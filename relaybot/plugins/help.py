@@ -5,7 +5,8 @@ class Help(plugin.Plugin):
     """
     def __init__(self, bot):
         super(Help, self).__init__(bot)
-        self.command = "!help"
+        self.command_help = "!help"
+        self.command_plugins = "!plugins"
 
     @property
     def description(self):
@@ -13,25 +14,46 @@ class Help(plugin.Plugin):
 
     @property
     def long_desc(self):
-        return ("!help - shows a list of all available plugins and what they"
-        " do.\n!help <command> - shows detailed information about a command.")
+        return ("!help - shows a list of all available commands and what they"
+        " do.\n!plugins <command/plugin name> - shows detailed information about"
+        "a plugin.\n!plugins - show a list of all plugins and their"
+        " descriptions.")
+
+    @property
+    def commands(self):
+        return {
+            "!help": "shows a list of commands",
+            "!plugins": "shows a list of all plugins and their descriptions,"
+            " or detailed info about a specific plugin"
+        }
 
     def private_chat_hook(self, steamid, message):
-        if message.startswith(self.command):
+        if message.startswith(self.command_help):
+            self.bot.user.send_msg(steamid, self.build_help_list())
+        elif message.startswith(self.command_plugins):
             args = message[:-1].split()
             if len(args) > 1:
                 self.bot.user.send_msg(steamid, self.get_long_desc(args[1]))
             else:
-                self.bot.user.send_msg(steamid, self.build_help_list())
+                self.bot.user.send_msg(steamid, self.build_plugin_list())
 
     def build_help_list(self):
-        """Builds a list of short descriptions of plugins along with their
-        names.
+        """Builds a list of commands along with their descriptions.
         """
         result = "\n"
         for plugin in self.bot.plugins:
-            result += "{}\n\t{}\n".format(type(plugin).__name__,
-                                        plugin.description)
+            if plugin.commands is not None:
+                for k, v in plugin.commands.iteritems():
+                    result += "{} - {}\n".format(k, v)
+        return result
+
+    def build_plugin_list(self):
+        """Builds a list of all plugins and their descriptions.
+        """
+        result = "\n"
+        for plugin in self.bot.plugins:
+            result += type(plugin).__name__
+            result += "\n\t" + plugin.description + "\n"
         return result
 
     def get_long_desc(self, name):
