@@ -1,13 +1,21 @@
 {
-    "STEAM_USER": "",
-    "STEAM_PWD": "",
-    "STEAM_PROFILE_NAME": "RelayBot 2.0™",
-    "STEAM_API_KEY": "",
-    "AUTHORIZED_USERS": [],
-    "IGNORED_USERS": [],
+    "AUTHORIZED_USERS": [
+        
+    ], 
+    "IGNORED_USERS": [
+        
+    ], 
     "PLUGINS": {
-        "RELAYBOT_REPO": "Relaybot2.0",
-        "GITHUB_USER": "",
-        "GITHUB_PASSW": ""
-    }
+        "GITHUB_PASSW": "", 
+        "GITHUB_USER": "", 
+        "RELAYBOT_REPO": "Relaybot2.0", 
+        "TWITTER_ASECRET": "", 
+        "TWITTER_ATOKEN": "", 
+        "TWITTER_CKEY": "", 
+        "TWITTER_CSECRET": ""
+    }, 
+    "STEAM_API_KEY": "", 
+    "STEAM_PROFILE_NAME": "RelayBot 2.0\u2122", 
+    "STEAM_PWD": "", 
+    "STEAM_USER": ""
 }

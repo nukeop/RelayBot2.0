@@ -14,3 +14,4 @@ six==1.10.0
 steam
 github3.py
 mock
+twitter
