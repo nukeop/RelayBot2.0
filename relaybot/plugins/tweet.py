@@ -21,8 +21,6 @@ class TweetPlugin(plugin.Plugin):
             )
         )
 
-        #self.twitter.statuses.update(status="test test 1 2 3")
-
     @property
     def description(self):
         return ("Lets users tweet from RelayBot's account.")
