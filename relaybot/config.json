@@ -4,5 +4,10 @@
     "STEAM_PROFILE_NAME": "RelayBot 2.0™",
     "STEAM_API_KEY": "",
     "AUTHORIZED_USERS": [],
-    "IGNORED_USERS": []
+    "IGNORED_USERS": [],
+    "PLUGINS": {
+        "RELAYBOT_REPO": "Relaybot2.0",
+        "GITHUB_USER": "",
+        "GITHUB_PASSW": ""
+    }
 }

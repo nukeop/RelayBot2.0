@@ -1,10 +1,8 @@
 import github3
 
 import plugin
+from config import config
 
-RELAYBOT_REPO = "Relaybot2.0"
-GITHUB_USER = ""
-GITHUB_PASSW = ""
 
 class Github(plugin.Plugin):
     """Interface between Steam chat and Github repo.
@@ -16,7 +14,10 @@ class Github(plugin.Plugin):
     def __init__(self, bot):
         super(Github, self).__init__(bot)
         self.command = "!github"
-        self.gh = github3.login(GITHUB_USER, password=GITHUB_PASSW)
+        self.gh = github3.login(
+            config["PLUGINS"]["GITHUB_USER"],
+            password=config["PLUGINS"]["GITHUB_PASSW"]
+        )
 
     @property
     def description(self):
@@ -40,7 +41,10 @@ class Github(plugin.Plugin):
                 self.bot.user.send_msg(steamid, self.build_commit_string())
 
     def build_commit_string(self):
-        repo = self.gh.repository(self.gh.user(), RELAYBOT_REPO)
+        repo = self.gh.repository(
+            "nukeop",
+            config["PLUGINS"]["RELAYBOT_REPO"]
+        )
         result = ""
 
         for i, c in enumerate(repo.iter_commits()):
