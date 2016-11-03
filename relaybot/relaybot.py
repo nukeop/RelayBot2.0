@@ -5,7 +5,7 @@ import os
 
 import steam.client
 
-VERSION = (2, 0.1)
+VERSION = (2, 0.2)
 
 logger = logging.getLogger()
 
@@ -99,7 +99,7 @@ def main():
     bot = Bot(args.logfile)
 
     logger.info("Starting Relay Bot 2.0")
-    logger.info("Version: %d.%d", VERSION[0], VERSION[1])
+    logger.info("Version: {}.{}".format(VERSION[0], VERSION[1]))
 
     bot.initialize()
 

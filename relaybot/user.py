@@ -21,7 +21,6 @@ class MsgClientJoinChat(object):
         self.IsVoiceSpeaker = False
 
     def serialize(self):
-        print self.SteamIdChat
         import StringIO
         out = StringIO.StringIO()
         hsteamidchat = format(self.SteamIdChat, '02x')
