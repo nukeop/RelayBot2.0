@@ -42,8 +42,8 @@ class TweetPlugin(plugin.Plugin):
         if message.startswith(self.command):
             tokens = message.strip().strip('\x00').split()
             if len(tokens) > 1:
-                tweet = ' '.join(tokens[1:])
-                tweet += u'\n―' + self.bot.user.get_name_from_steamid(steamid)
+                tweet = ' '.join(tokens[1:]).decode('utf-8')
+                tweet += '\n' + u'―' + self.bot.user.get_name_from_steamid(steamid)
 
                 if len(tweet) <= (TWEET_LIMIT - len(self.bot.user.get_name_from_steamid(steamid)) - 2):
                     self.twitter.statuses.update(status=tweet)
