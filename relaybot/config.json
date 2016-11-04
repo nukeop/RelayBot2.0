@@ -12,7 +12,7 @@
         "TWITTER_ASECRET": "", 
         "TWITTER_ATOKEN": "", 
         "TWITTER_CKEY": "", 
-        "TWITTER_CSECRET": ""
+        "TWITTER_CSECRET": "",
         "OPENWEATHERMMAP_APIKEY": ""
     }, 
     "STEAM_API_KEY": "", 
