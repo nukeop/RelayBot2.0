@@ -92,6 +92,11 @@ class AdminPlugin(plugin.Plugin):
                             "ID {} not found on authorized"
                             " list.".format(args[2])
                         )
+                elif args[1] == "list":
+                    self.bot.user.send_msg(steamid, "Authorized:\n" +
+                                           self.list_from("AUTHORIZED_USERS") +
+                                           "\nIgnored:\n" +
+                                           self.list_from("IGNORED_USERS"))
 
 
     def add_to(self, steamid, key):
@@ -102,6 +107,14 @@ class AdminPlugin(plugin.Plugin):
     def remove_from(self, steamid, key):
         config[key].remove(steamid)
         self.save_config()
+
+    def list_from(self, key):
+        msg = '\n'.join(["{}"
+                         " ({})".format(self.bot.user.get_name_from_steamid(x),
+                                        x) for x in config[key]])
+        if msg == []:
+            return ""
+        return msg
 
 
     def save_config(self):
