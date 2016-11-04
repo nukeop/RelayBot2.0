@@ -13,7 +13,7 @@
         "TWITTER_ATOKEN": "", 
         "TWITTER_CKEY": "", 
         "TWITTER_CSECRET": ""
-        "OPENWEATHERMMAP_APIKEY"
+        "OPENWEATHERMMAP_APIKEY": ""
     }, 
     "STEAM_API_KEY": "", 
     "STEAM_PROFILE_NAME": "RelayBot 2.0\u2122", 
