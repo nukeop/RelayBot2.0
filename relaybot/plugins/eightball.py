@@ -53,7 +53,5 @@ class EightBall(plugin.Plugin):
             self.bot.user.send_msg(steamid, random.choice(self.answers))
 
     def group_chat_hook(self, groupid, userid, message):
-        pass
-
-    def enter_group_chat_hook(self, groupid):
-        pass
+        if message.startswith(self.command):
+            self.bot.user.send_group_msg(groupid, random.choice(self.answers))

@@ -21,6 +21,8 @@ class TweetPlugin(plugin.Plugin):
             )
         )
 
+        #self.twitter.statuses.update(status="test test 1 2 3")
+
     @property
     def description(self):
         return ("Lets users tweet from RelayBot's account.")
@@ -40,20 +42,27 @@ class TweetPlugin(plugin.Plugin):
 
     def private_chat_hook(self, steamid, message):
         if message.startswith(self.command):
-            tokens = message.strip().strip('\x00').split()
-            if len(tokens) > 1:
-                tweet = ' '.join(tokens[1:]).decode('utf-8')
-                tweet += '\n' + u'―' + self.bot.user.get_name_from_steamid(steamid)
+            self.bot.user.send_msg(steamid, self.tweet(steamid, message))
 
-                if len(tweet) <= (TWEET_LIMIT - len(self.bot.user.get_name_from_steamid(steamid)) - 2):
-                    self.twitter.statuses.update(status=tweet)
-                    self.bot.user.send_msg(steamid, "Tweet sent.")
-                else:
-                    msg = ("Tweet too long, try again. Max length with your"
-                           " username: {}. Your tweet is {} characters"
-                           " long.".format(
-                               TWEET_LIMIT - len(self.bot.user.get_name_from_steamid(steamid)) - 2,
-                               len(tweet)
-                           )
-                    )
-                    self.bot.user.send_msg(steamid, msg)
+    def group_chat_hook(self, groupid, userid, message):
+        if message.startswith(self.command):
+            self.bot.user.send_group_msg(groupid, self.tweet(userid, message))
+
+    def tweet(self, steamid, message):
+        tokens = message.strip().strip('\x00').split()
+        if len(tokens) > 1:
+            tweet = ' '.join(tokens[1:])
+            tweet += u'\n―' + self.bot.user.get_name_from_steamid(steamid)
+
+            if len(tweet) <= (TWEET_LIMIT - len(self.bot.user.get_name_from_steamid(steamid)) - 2):
+                self.twitter.statuses.update(status=tweet)
+                return "Tweet sent."
+            else:
+                msg = ("Tweet too long, try again. Max length with your"
+                       " username: {}. Your tweet is {} characters"
+                       " long.".format(
+                           TWEET_LIMIT - len(self.bot.user.get_name_from_steamid(steamid)) - 2,
+                           len(tweet)
+                       )
+                )
+                return msg

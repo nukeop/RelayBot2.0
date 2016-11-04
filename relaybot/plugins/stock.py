@@ -31,10 +31,10 @@ class Stock(plugin.Plugin):
                 ' '.join(message[:-1].split(' ')[1:])))
 
     def group_chat_hook(self, groupid, userid, message):
-        pass
+        if message.startswith(self.command):
+            self.bot.user.send_group_msg(groupid, self.get_stock(
+                ' '.join(message[:-1].split(' ')[1:])))
 
-    def enter_group_chat_hook(self, groupid):
-        pass
 
     @staticmethod
     def get_stock(symbol):

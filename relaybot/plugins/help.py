@@ -37,6 +37,10 @@ class Help(plugin.Plugin):
             else:
                 self.bot.user.send_msg(steamid, self.build_plugin_list())
 
+    def group_chat_hook(self, groupid, userid, message):
+        if message.startswith(self.command_help):
+            self.bot.user.send_group_msg(groupid, self.build_help_list())
+
     def build_help_list(self):
         """Builds a list of commands along with their descriptions.
         """

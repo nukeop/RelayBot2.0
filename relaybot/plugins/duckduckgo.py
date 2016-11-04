@@ -34,10 +34,9 @@ class DuckDuckGoDefine(plugin.Plugin):
                 ' '.join(message[:-1].split(' ')[1:])))
 
     def group_chat_hook(self, groupid, userid, message):
-        pass
-
-    def enter_group_chat_hook(self, groupid):
-        pass
+        if message.startswith(self.command):
+            self.bot.user.send_group_msg(groupid, self.ddg_def(
+                ' '.join(message[:-1].split(' ')[1:])))
 
     @staticmethod
     def ddg_def(term):

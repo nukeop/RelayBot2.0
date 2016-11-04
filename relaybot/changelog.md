@@ -1,3 +1,4 @@
 - Version 2.0: Core functionality. Still being developed. Will be considered complete when the bot has all the functions of the previous version.
 - Version 2.0.1: Plugin API changed. No longer throws exceptions if functions are not overloaded by inheriting classes. Adds two new hooks to be called when users enter/exit chatrooms. Allows plugins to expose the commands they react to, if any, or return None to inform they cannot be called from chat.
 - Version 2.0.2: Twitter plugin. Users can now send tweets through Relay Bot's interface.
+- Version 2.0.3: Extended support for group chats, group chat versions of many plugins.
