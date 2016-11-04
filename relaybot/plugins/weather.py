@@ -39,6 +39,9 @@ class Weather(plugin.Plugin):
                 ' '.join(message[:-1].split(' ')[1:])))
 
     def weather(self, location):
+        if len(location) == 0:
+            return "Please enter a location"
+
         r = requests.get('http://api.openweathermap.org/data/2.5/weather?q='+location+'&units=metric&APPID='+self.apikey).text
         parsed = json.loads(r)
 
@@ -46,9 +49,7 @@ class Weather(plugin.Plugin):
         for w in parsed['weather']:
             weather_conditions.append(w['main'])
 
-        msg = "Weather in " + parsed['name'] + ":\nTemperature: " + str(parsed['main']['temp']) + ' C\nConditions: ' + \
-              ', '.join(weather_conditions) + "\nWind speed: " + str(parsed['wind']['speed']) + ' m/s\nCloudiness: ' + str(parsed['clouds']['all']) \
-              + '%'
-
+        msg = "Weather in {}: \nTemperature: {} C\nConditions: {}\nWind speed: {} m/s\nCloudiness: {}%" \
+            .format(parsed['name'].encode('utf-8'),parsed['main']['temp'], ', '.join(weather_conditions),
+                    parsed['wind']['speed'], parsed['clouds']['all'])
         return msg
-
