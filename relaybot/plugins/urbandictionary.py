@@ -36,35 +36,15 @@ class UrbanDictionary(plugin.Plugin):
 
     def private_chat_hook(self, steamid, message):
         if message.startswith(self.command):
-
-            args = message[:-1].split(' ')
-            if len(args) < 2:
-                return "Try !urban <term>."
-            num = 1
-            num_in_args = False
-            try:
-                num = int(args[1])
-                num_in_args = True
-            except ValueError:
-                pass
-
-            msg = None
-            if num_in_args:
-                msg = self.ud_def(' '.join(args[2:]), num)
-            else:
-                msg = self.ud_def(' '.join(args[1:]), num)
-
-            self.bot.user.send_msg(steamid, msg)
+            self.bot.user.send_msg(steamid, self.reply(message))
 
     def group_chat_hook(self, groupid, userid, message):
-        pass
+        if message.startswith(self.command):
+            self.bot.user.send_msg(groupid, self.reply(message))
 
-    def enter_group_chat_hook(self, groupid):
-        pass
 
     @staticmethod
     def ud_def(term, num):
-        print term
         url = UD_API_URL.format(term)
         text = requests.get(url).text
         parsed = json.loads(text)
@@ -76,10 +56,30 @@ class UrbanDictionary(plugin.Plugin):
             msg = ""
             for i, entry in enumerate(parsed['list']):
                 if i < num:
-                    print entry['definition']
                     msg += "({}) {}\n".format(i+1,
                                         entry['definition'].encode('utf-8'))
                 else:
                     break
 
             return msg
+
+
+    def reply(self, message):
+        args = message[:-1].split(' ')
+        if len(args) < 2:
+            return "Try !urban <term>."
+        num = 1
+        num_in_args = False
+        try:
+            num = int(args[1])
+            num_in_args = True
+        except ValueError:
+            pass
+
+        msg = None
+        if num_in_args:
+            msg = self.ud_def(' '.join(args[2:]), num)
+        else:
+            msg = self.ud_def(' '.join(args[1:]), num)
+
+        return msg

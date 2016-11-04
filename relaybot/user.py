@@ -1,7 +1,8 @@
+# -*- coding: utf-8 -*-
 import steam.client
 import steam.client.builtins.friends
 
-from steam.core.msg import MsgProto, Msg
+from steam.core.msg import MsgProto, Msg, ClientChatMsg
 from steam.enums import EResult, EPersonaState, EFriendRelationship
 from steam.enums import EChatEntryType
 from steam.enums.emsg import EMsg
@@ -60,6 +61,7 @@ class User(object):
         self.client.on(EMsg.ClientFriendsList, self.on_client_friends_list)
         self.client.on(EMsg.ClientAddFriendResponse, self.on_friend_added)
         self.client.on(EMsg.ClientChatInvite, self.on_chat_invite)
+        self.client.on(EMsg.ClientChatMsg, self.on_group_chat_msg)
 
         if self.client.relogin_available:
             self.client.relogin()
@@ -96,6 +98,14 @@ class User(object):
         msg = Msg(EMsg.ClientJoinChat, extended=True)
         msg.body = MsgClientJoinChat(chatroomid)
         self.client.send(msg)
+
+    def send_group_msg(self, chatroomid, msg):
+        m = Msg(EMsg.ClientChatMsg, extended=True)
+        m.body.steamIdChatter = self.client.steam_id.as_64
+        m.body.steamIdChatRoom = chatroomid
+        m.body.ChatMsgType = 1
+        m.body.ChatMsg = msg
+        self.client.send(m)
 
     def send_msg(self, steamid, msg):
         """Sends a message to a steam user.
@@ -197,3 +207,15 @@ class User(object):
                 for plugin in self.bot.plugins:
                     plugin.private_chat_hook(msg.body.steamid_from,
                                              msg.body.message)
+
+    def on_group_chat_msg(self, msg):
+        logger.info("(Chatroom: {}) {}: {}".format(
+            msg.body.steamIdChatRoom,
+            self.get_name_from_steamid(msg.body.steamIdChatter).encode('utf-8', 'replace'),
+            msg.body.ChatMsg))
+
+        for plugin in self.bot.plugins:
+            plugin.group_chat_hook(
+                msg.body.steamIdChatRoom,
+                msg.body.steamIdChatter,
+                msg.body.ChatMsg)
