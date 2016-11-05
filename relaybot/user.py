@@ -2,7 +2,7 @@
 import steam.client
 import steam.client.builtins.friends
 
-from steam.core.msg import MsgProto, Msg, ClientChatMsg
+from steam.core.msg import MsgProto, Msg, ClientChatMsg, ClientJoinChat
 from steam.enums import EResult, EPersonaState, EFriendRelationship
 from steam.enums import EChatEntryType
 from steam.enums.emsg import EMsg
@@ -14,28 +14,6 @@ import time
 from config import config
 import relaybot
 logger = logging.getLogger(__name__)
-
-
-class MsgClientJoinChat(object):
-    def __init__(self, sidc):
-        self.SteamIdChat = sidc
-        self.IsVoiceSpeaker = False
-
-    def serialize(self):
-        import StringIO
-        out = StringIO.StringIO()
-        hsteamidchat = format(self.SteamIdChat, '02x')
-        if len(hsteamidchat)%4!=0:
-            hsteamidchat = (len(hsteamidchat)%4)*'0' + hsteamidchat
-
-        newstr = ""
-        for i in range(len(hsteamidchat), 2, -2):
-            newstr += hsteamidchat[i-2:i]
-
-        hsteamidchat = bytearray.fromhex(newstr)
-        out.write(hsteamidchat)
-        out.write("\x00")
-        return out.getvalue()
 
 
 class User(object):
@@ -62,6 +40,7 @@ class User(object):
         self.client.on(EMsg.ClientAddFriendResponse, self.on_friend_added)
         self.client.on(EMsg.ClientChatInvite, self.on_chat_invite)
         self.client.on(EMsg.ClientChatMsg, self.on_group_chat_msg)
+        self.client.on(EMsg.ClientChatMemberInfo, self.on_chat_member_info)
 
         if self.client.relogin_available:
             self.client.relogin()
@@ -96,7 +75,7 @@ class User(object):
         """Joins a group chat given its id.
         """
         msg = Msg(EMsg.ClientJoinChat, extended=True)
-        msg.body = MsgClientJoinChat(chatroomid)
+        msg.body.steamIdChat = chatroomid
         self.client.send(msg)
 
     def send_group_msg(self, chatroomid, msg):
@@ -219,3 +198,19 @@ class User(object):
                 msg.body.steamIdChatRoom,
                 msg.body.steamIdChatter,
                 msg.body.ChatMsg)
+
+    def on_chat_member_info(self, msg):
+        to_log = ""
+        if msg.body.chatAction == 0x01:
+            to_log = "({}) {} ({}) entered the chat."
+        elif msg.body.chatAction == 0x02:
+            to_log = "({}) {} ({}) left the chat."
+        elif msg.body.chatAction == 0x04:
+            to_log = "({}) {} ({}) disconnected."
+
+        to_log = to_log.format(
+            msg.body.steamIdChat,
+            self.get_name_from_steamid(msg.body.steamIdUserActedOn),
+            msg.body.steamIdUserActedOn)
+
+        logger.info(to_log)
