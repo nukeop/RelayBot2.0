@@ -46,7 +46,7 @@ class Joke(plugin.Plugin):
     def get_joke(self):
         rows = self.bot.database.select("jokes", "*")
         if len(rows)<1:
-            self.bot.user.send_msg(steamid, "No jokes in the database.")
+            return "No jokes in the database."
         else:
             row = random.choice(rows)
 
