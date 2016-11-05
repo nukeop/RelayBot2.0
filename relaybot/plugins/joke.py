@@ -43,68 +43,78 @@ class Joke(plugin.Plugin):
             "!ratejoke <id> <score>": "rates a joke from 0 to 5 stars"
         }
 
+    def get_joke(self):
+        rows = self.bot.database.select("jokes", "*")
+        if len(rows)<1:
+            self.bot.user.send_msg(steamid, "No jokes in the database.")
+        else:
+            row = random.choice(rows)
+
+            ratings = [int(x[0]) for x in self.bot.database.select(
+                "jokes_ratings",
+                "rating",
+                "jokeid={}".format(row[0])
+            )]
+
+            rating = 0
+            if len(ratings) > 0:
+                rating = sum(ratings)/float(len(ratings))
+            rating = Joke.rating_to_stars(rating)
+
+            return ("Joke #{} by {} ({}):\n"
+            "{}".format(row[0], row[2], rating, row[1]))
+
+    def add_joke(self, steamid, message):
+        tokens = message.strip().strip('\x00').split()
+        if len(tokens)<2:
+            return "No content. Joke not added."
+        else:
+            self.bot.database.insert("jokes", "content, author", "?, ?",
+                        (
+                            " ".join(tokens[1:]),
+                            self.bot.user.get_name_from_steamid(steamid)
+                        )
+            )
+            return "Joke added."
+
+    def rate_joke(self, steamid, message):
+        tokens = message.strip().strip('\x00').split()
+        if len(tokens)!=3:
+            return ("Incorrect number of arguments. You have to supply"
+                    " the id of the joke you want to rate, and a rating.")
+        else:
+            if int(tokens[2])>5 or int(tokens[2])<0:
+                return ("Rating must be between 0 and 5.")
+
+            row = self.bot.database.select("jokes", "*",
+                                            "id={}".format(tokens[1]))
+            if len(row)<1:
+                return
+
+            self.bot.database.insert(
+                "jokes_ratings",
+                "jokeid, rating",
+                "?, ?",
+                (tokens[1], tokens[2])
+            )
+
+            return "Joke rated."
 
     def private_chat_hook(self, steamid, message):
         if message.startswith(self.use_command):
-            rows = self.bot.database.select("jokes", "*")
-            if len(rows)<1:
-                self.bot.user.send_msg(steamid, "No jokes in the database.")
-            else:
-                row = random.choice(rows)
-
-                ratings = [int(x[0]) for x in self.bot.database.select(
-                    "jokes_ratings",
-                    "rating",
-                    "jokeid={}".format(row[0])
-                )]
-
-                rating = 0
-                if len(ratings) > 0:
-                    rating = sum(ratings)/float(len(ratings))
-                rating = Joke.rating_to_stars(rating)
-
-
-                self.bot.user.send_msg(steamid, "Joke #{} by {} ({}):\n"
-                                       "{}".format(row[0], row[2], rating,
-                                                   row[1]))
+            self.bot.user.send_msg(steamid, self.get_joke())
         elif message.startswith(self.add_command):
-            tokens = message.strip().strip('\x00').split()
-            if len(tokens)<2:
-                self.bot.user.send_msg(steamid, "No content. Joke not added.")
-            else:
-                self.bot.database.insert("jokes", "content, author", "?, ?",
-                                         (
-                                             " ".join(tokens[1:]),
-                                             self.bot.user.get_name_from_steamid(steamid)
-                                         )
-                )
-                self.bot.user.send_msg(steamid, "Joke added.")
+            self.bot.user.send_msg(steamid, self.add_joke(steamid, message))
         elif message.startswith(self.rate_command):
-            tokens = message.strip().strip('\x00').split()
-            if len(tokens)!=3:
-                self.bot.user.send_msg(steamid, "Incorrect number of"
-                                       " arguments. You have to supply the"
-                                       " id of the joke you want to rate,"
-                                       " and a rating.")
-            else:
-                if int(tokens[2])>5 or int(tokens[2])<0:
-                    self.bot.user.send_msg(steamid, "Rating must be between 0"
-                                           " and 5.")
-                    return
+            self.bot.user.send_msg(steamid, self.rate_joke(steamid, message))
 
-                row = self.bot.database.select("jokes", "*",
-                                                "id={}".format(tokens[1]))
-                if len(row)<1:
-                    return
-
-                self.bot.database.insert(
-                    "jokes_ratings",
-                    "jokeid, rating",
-                    "?, ?",
-                    (tokens[1], tokens[2])
-                )
-
-                self.bot.user.send_msg(steamid, "Joke rated.")
+    def group_chat_hook(self, groupid, userid, message):
+        if message.startswith(self.use_command):
+            self.bot.user.send_group_msg(groupid, self.get_joke())
+        elif message.startswith(self.add_command):
+            self.bot.user.send_group_msg(groupid, self.add_joke(userid, message))
+        elif message.startswith(self.rate_command):
+            self.bot.user.send_group_msg(groupid, self.rate_joke(userid, message))
 
     def init_db(self):
         tables = self.bot.database.select("sqlite_master", "name",
