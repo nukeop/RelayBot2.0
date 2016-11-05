@@ -3,3 +3,31 @@
 
 
 New incarnation of Relay Bot™
+
+## How to run
+
+Clone the repo:
+
+`$ git clone https://github.com/nukeop/RelayBot2.0.git`
+
+Create a virtual environment and install dependencies:
+
+```
+$ cd RelayBot2.0
+$ mkdir venv
+$ virtualenv venv
+$ source venv/bin/activate
+$ pip install -r requirements.txt
+```
+
+Edit the config file and plug in the username, password, and possibly other keys as required by plugins (if you want those plugins to work). You can also add users to "ignored" and "authorized" lists:
+
+`$ nano relaybot/config.json`
+
+Start the program:
+
+`$ python relaybot/relaybot.py`
+
+If your account has 2FA or steam Guard enabled you will be prompted to enter the code once, then the program will save a sentry file named `relaybot_sentry.bin` so you don't have to do it again. It will also create a local sqlite database named `relaybot.db` if it does not exist.
+
+For a list of all available commands, open the chat window on Steam, and send `!help` to the bot, it will reply with all commands you can use. `!plugins` will display a list of all plugins and short descriptions (even of plugins that are not callable). `!plugins <name>` will display detailed info about a plugin.

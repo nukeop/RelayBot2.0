@@ -87,3 +87,8 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# Relay Bot-specific files
+cm_servers.json
+relaybot.db
+relaybot_sentry.bin
