@@ -203,10 +203,25 @@ class User(object):
         to_log = ""
         if msg.body.chatAction == 0x01:
             to_log = "({}) {} ({}) entered the chat."
+            for plugin in self.bot.plugins:
+                plugin.user_entered_hook(
+                    msg.body.steamIdChat,
+                    msg.body.steamIdUserActedOn
+                )
         elif msg.body.chatAction == 0x02:
             to_log = "({}) {} ({}) left the chat."
+            for plugin in self.bot.plugins:
+                plugin.user_left_hook(
+                    msg.body.steamIdChat,
+                    msg.body.steamIdUserActedOn
+                )
         elif msg.body.chatAction == 0x04:
             to_log = "({}) {} ({}) disconnected."
+            for plugin in self.bot.plugins:
+                plugin.user_left_hook(
+                    msg.body.steamIdChat,
+                    msg.body.steamIdUserActedOn
+                )
 
         to_log = to_log.format(
             msg.body.steamIdChat,
