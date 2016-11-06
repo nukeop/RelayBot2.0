@@ -4,6 +4,6 @@ python:
 
 install:
   - pip install -r requirements.txt
-  - pip install git+git://github.com/ValvePython/steam.git
+  - pip install git+git://github.com/ValvePython/steam.git --upgrade
 
 script: yes | nosetests tests -s
