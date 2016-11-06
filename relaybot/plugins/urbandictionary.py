@@ -40,7 +40,7 @@ class UrbanDictionary(plugin.Plugin):
 
     def group_chat_hook(self, groupid, userid, message):
         if message.startswith(self.command):
-            self.bot.user.send_msg(groupid, self.reply(message))
+            self.bot.user.send_group_msg(groupid, self.reply(message))
 
 
     @staticmethod

@@ -21,8 +21,6 @@ class TweetPlugin(plugin.Plugin):
             )
         )
 
-        #self.twitter.statuses.update(status="test test 1 2 3")
-
     @property
     def description(self):
         return ("Lets users tweet from RelayBot's account.")
@@ -49,7 +47,7 @@ class TweetPlugin(plugin.Plugin):
             self.bot.user.send_group_msg(groupid, self.tweet(userid, message))
 
     def tweet(self, steamid, message):
-        tokens = message.strip().strip('\x00').split()
+        tokens = message.split()
         if len(tokens) > 1:
             tweet = ' '.join(tokens[1:])
             tweet += u'\n―' + self.bot.user.get_name_from_steamid(steamid)
