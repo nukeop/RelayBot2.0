@@ -4,6 +4,7 @@ import random
 
 import database
 import plugin
+import util
 
 logger = logging.getLogger(__name__)
 
@@ -59,7 +60,7 @@ class Joke(plugin.Plugin):
             rating = 0
             if len(ratings) > 0:
                 rating = sum(ratings)/float(len(ratings))
-            rating = Joke.rating_to_stars(rating)
+            rating = util.rating_to_stars(rating)
 
             return ("Joke #{} by {} ({}):\n"
             "{}".format(row[0], row[2], rating, row[1]))
@@ -146,7 +147,3 @@ class Joke(plugin.Plugin):
                                            " jokes(id)"
             )
 
-    @staticmethod
-    def rating_to_stars(rating):
-        rating = int(rating)
-        return ("★" * rating) + ("☆"*(5-rating))
