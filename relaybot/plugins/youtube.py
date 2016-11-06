@@ -18,16 +18,16 @@ class YoutubePlugin(plugin.Plugin):
 
     @property
     def description(self):
+
         return "Shows info about Youtube videos posted by users in group chat."
 
     def group_chat_hook(self, groupid, userid, message):
-        self.bot.user.send_group_msg(groupid, self.get_video_info(message))
+        if self.yt_regex.search(message):
+            self.bot.user.send_group_msg(groupid, self.get_video_info(message))
 
     def get_video_info(self, message):
         match = self.yt_regex.search(message)
-        yt_id = None
-        if match:
-            yt_id = match.group('ID')
+        yt_id = match.group('ID')
 
         reply = requests.get("http://youtube.com/get_video_info", params={
             "video_id": yt_id,
