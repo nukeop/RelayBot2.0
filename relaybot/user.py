@@ -12,6 +12,7 @@ import os
 import time
 
 from config import config
+import groups
 import relaybot
 logger = logging.getLogger(__name__)
 
@@ -42,6 +43,8 @@ class User(object):
         self.client.on(EMsg.ClientChatMsg, self.on_group_chat_msg)
         self.client.on(EMsg.ClientChatMemberInfo, self.on_chat_member_info)
 
+        self.groups = groups.Groups(self.bot.database)
+
         if self.client.relogin_available:
             self.client.relogin()
         else:
@@ -68,7 +71,10 @@ class User(object):
         """Gets the profile name corresponding to a given steam id.
         """
         suser = self.client.get_user(steamid, False)
-        return suser.name
+        if suser.name is not None:
+            return suser.name
+        else:
+            return "<unknown>"
 
 
     def join_chat(self, chatroomid):
@@ -168,6 +174,8 @@ class User(object):
                         msg.body.steam_id_patron),
                     msg.body.steam_id_patron)
 
+        self.groups.add_group(msg.body.steam_id_chat, msg.body.chat_name)
+
         self.join_chat(msg.body.steam_id_chat)
 
     def on_chat_message(self, msg):
@@ -188,8 +196,10 @@ class User(object):
                                              msg.body.message)
 
     def on_group_chat_msg(self, msg):
+        groupname = str(self.groups.get_name(msg.body.steamIdChatRoom))
+
         logger.info("(Chatroom: {}) {}: {}".format(
-            msg.body.steamIdChatRoom,
+            groupname,
             self.get_name_from_steamid(msg.body.steamIdChatter).encode('utf-8', 'replace'),
             msg.body.ChatMsg))
 
