@@ -37,14 +37,14 @@ class YoutubePlugin(plugin.Plugin):
 
         if reply.text:
             info = reply.text.encode('utf-8')
-            info = urllib.unquote(urllib.unquote(urllib.unquote(info))).decode('utf8')
+            info = urllib.unquote(urllib.unquote(urllib.unquote(info))).decode('utf-8')
 
             title = self.get_args(info, "title", "&").replace("+", " ")
             rating = util.rating_to_stars(float(self.get_args(info, "avg_rating", "&")))
             length = int(self.get_args(info, "length_seconds", "&"))
             length = "{}:{}".format(length/60, length%60)
 
-            return "{} | {} | {}".format(title, rating, length)
+            return "{} | {} | {}".format(title, rating, length).decode('utf-8')
 
     def get_args(self, args, key, query):
         args = args.encode('utf-8')
