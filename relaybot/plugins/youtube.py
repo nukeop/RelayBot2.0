@@ -18,7 +18,6 @@ class YoutubePlugin(plugin.Plugin):
 
     @property
     def description(self):
-
         return "Shows info about Youtube videos posted by users in group chat."
 
     def group_chat_hook(self, groupid, userid, message):

@@ -2,7 +2,6 @@
 import logging
 import random
 
-import database
 import plugin
 import util
 
@@ -66,7 +65,7 @@ class Joke(plugin.Plugin):
             "{}".format(row[0], row[2], rating, row[1]))
 
     def add_joke(self, steamid, message):
-        tokens = message.strip().strip('\x00').split()
+        tokens = message.split()
         if len(tokens)<2:
             return "No content. Joke not added."
         else:
@@ -79,7 +78,7 @@ class Joke(plugin.Plugin):
             return "Joke added."
 
     def rate_joke(self, steamid, message):
-        tokens = message.strip().strip('\x00').split()
+        tokens = message.split()
         if len(tokens)!=3:
             return ("Incorrect number of arguments. You have to supply"
                     " the id of the joke you want to rate, and a rating.")

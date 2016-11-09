@@ -38,7 +38,7 @@ class Terminal(plugin.Plugin):
                                        " denied.")
                 return
 
-            args = message[:-1].split()
+            args = message.split()
             if len(args)>1:
                 command = " ".join(args[1:])
                 logger.info("Got command: {}".format(command))
