@@ -185,7 +185,7 @@ class User(object):
 
         if msg.body.chat_entry_type == EChatEntryType.ChatMsg:
             logger.info("Message from {}: {}".format(
-                self.get_name_from_steamid(msg.body.steamid_from),
+                self.get_name_from_steamid(msg.body.steamid_from).encode('utf-8'),
                 msg.body.message.strip().strip('\x00')))
 
             # Do not interact with ignored users - just log what they're
