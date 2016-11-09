@@ -89,7 +89,7 @@ class User(object):
         m.body.steamIdChatter = self.client.steam_id.as_64
         m.body.steamIdChatRoom = chatroomid
         m.body.ChatMsgType = 1
-        m.body.ChatMsg = msg
+        m.body.text = msg
         self.client.send(m)
 
     def send_msg(self, steamid, msg):
@@ -201,13 +201,13 @@ class User(object):
         logger.info("(Chatroom: {}) {}: {}".format(
             groupname,
             self.get_name_from_steamid(msg.body.steamIdChatter).encode('utf-8').strip(),
-            msg.body.ChatMsg.strip().strip('\x00')))
+            msg.body.text.strip().strip('\x00')))
 
         for plugin in self.bot.plugins:
             plugin.group_chat_hook(
                 msg.body.steamIdChatRoom,
                 msg.body.steamIdChatter,
-                msg.body.ChatMsg.decode("utf-8").strip().strip('\x00'))
+                msg.body.text.decode("utf-8").strip().strip('\x00'))
 
     def on_chat_member_info(self, msg):
         to_log = ""

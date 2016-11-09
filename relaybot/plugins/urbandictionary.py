@@ -65,7 +65,7 @@ class UrbanDictionary(plugin.Plugin):
 
 
     def reply(self, message):
-        args = message[:-1].split(' ')
+        args = message.split(' ')
         if len(args) < 2:
             return "Try !urban <term>."
         num = 1

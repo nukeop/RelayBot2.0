@@ -31,7 +31,7 @@ class Help(plugin.Plugin):
         if message.startswith(self.command_help):
             self.bot.user.send_msg(steamid, self.build_help_list())
         elif message.startswith(self.command_plugins):
-            args = message[:-1].split()
+            args = message.split()
             if len(args) > 1:
                 self.bot.user.send_msg(steamid, self.get_long_desc(args[1]))
             else:

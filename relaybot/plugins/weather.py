@@ -31,12 +31,12 @@ class Weather(plugin.Plugin):
     def private_chat_hook(self, steamid, message):
         if message.startswith(self.command):
             self.bot.user.send_msg(steamid, self.weather(
-                ' '.join(message[:-1].split(' ')[1:])))
+                ' '.join(message.split(' ')[1:])))
 
     def group_chat_hook(self, groupid, userid, message):
         if message.startswith(self.command):
             self.bot.user.send_group_msg(groupid, self.weather(
-                ' '.join(message[:-1].split(' ')[1:])))
+                ' '.join(message.split(' ')[1:])))
 
     def weather(self, location):
         if len(location) == 0:

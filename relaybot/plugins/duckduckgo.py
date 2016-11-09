@@ -31,12 +31,12 @@ class DuckDuckGoDefine(plugin.Plugin):
     def private_chat_hook(self, steamid, message):
         if message.startswith(self.command):
             self.bot.user.send_msg(steamid, self.ddg_def(
-                ' '.join(message[:-1].split(' ')[1:])))
+                ' '.join(message.split(' ')[1:])))
 
     def group_chat_hook(self, groupid, userid, message):
         if message.startswith(self.command):
             self.bot.user.send_group_msg(groupid, self.ddg_def(
-                ' '.join(message[:-1].split(' ')[1:])))
+                ' '.join(message.split(' ')[1:])))
 
     @staticmethod
     def ddg_def(term):

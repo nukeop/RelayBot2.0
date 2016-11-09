@@ -48,7 +48,7 @@ class AdminPlugin(plugin.Plugin):
                                        " denied.")
                 return
 
-            args = message[:-1].split()
+            args = message.split()
             if len(args) > 1:
                 if args[1] == "ignore":
                     try:
