@@ -5,7 +5,7 @@ import os
 
 import steam.client
 
-VERSION = (2, 0.3)
+VERSION = (2, 0.4)
 
 logger = logging.getLogger()
 

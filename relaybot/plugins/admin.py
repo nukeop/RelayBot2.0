@@ -38,6 +38,8 @@ class AdminPlugin(plugin.Plugin):
             " users in the config",
             "!admin unauthorize <id>": "removes a user from the list of"
             " authorized users in the config",
+            "!admin list": "show authorized and ignored users",
+            "!admin eval": "evaluate a python expression - dangerous",
         }
 
     def private_chat_hook(self, steamid, message):
@@ -97,6 +99,12 @@ class AdminPlugin(plugin.Plugin):
                                            self.list_from("AUTHORIZED_USERS") +
                                            "\nIgnored:\n" +
                                            self.list_from("IGNORED_USERS"))
+                elif args[1] == "eval":
+                    try:
+                        result = eval(' '.join(args[2:]))
+                        self.bot.user.send_msg(steamid, str(result))
+                    except Exception as e:
+                        self.bot.user.send_msg(steamid, "Command triggered an exception: \n{}".format(str(e)))
 
 
     def add_to(self, steamid, key):

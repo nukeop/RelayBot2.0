@@ -31,6 +31,13 @@ class User(object):
         self.friends = steam.client.builtins.friends.SteamFriendlist(
             self.client)
 
+        #This is a dictionary of group chats the bot is currently in
+        #The keys are steam ids of the groups, and the values are steam id of
+        #users in these group chats
+        #If there is a group chat id here, it means the bot is in the chat
+        #(unless the ghost chat bug happens)
+        self.chats = {}
+
         self.bot = bot
 
         self.client.on('error', self.handle_errors)
@@ -55,6 +62,7 @@ class User(object):
         self.client.wait_event(EMsg.ClientFriendsList)
         logger.info("Logged in as %s", msg[0].body.persona_name)
         logger.info("SteamID: %s", repr(self.client.steam_id))
+
 
     def change_status(self, persona_state, player_name):
         """Changes user's status according to passed value.
@@ -83,6 +91,8 @@ class User(object):
         msg = Msg(EMsg.ClientJoinChat, extended=True)
         msg.body.steamIdChat = chatroomid
         self.client.send(msg)
+        self.chats[chatroomid] = []
+
 
     def send_group_msg(self, chatroomid, msg):
         m = Msg(EMsg.ClientChatMsg, extended=True)
@@ -91,6 +101,7 @@ class User(object):
         m.body.ChatMsgType = 1
         m.body.text = msg
         self.client.send(m)
+
 
     def send_msg(self, steamid, msg):
         """Sends a message to a steam user.
@@ -102,6 +113,7 @@ class User(object):
         sendmsg.body.rtime32_server_timestamp = int(time.time())
 
         self.client.send(sendmsg)
+
 
     def handle_errors(self, result):
         """Steam-related error callback.
@@ -133,6 +145,7 @@ class User(object):
         logger.info("Received ClientAccountInfo")
         self.change_status(EPersonaState.Online, config["STEAM_PROFILE_NAME"])
 
+
     def on_client_friends_list(self, msg):
         """Prints the list of friends and accepts friend invites when it
         receives the ClientFriendsList event.
@@ -152,6 +165,7 @@ class User(object):
                             friend.steam_id)
                 self.friends.add(friend.steam_id)
 
+
     def on_friend_added(self, msg):
         """Informs about new friends being added, or shows any errors.
         """
@@ -166,6 +180,7 @@ class User(object):
                         msg.body.persona_name_added,
                         msg.body.steam_id_added)
 
+
     def on_chat_invite(self, msg):
         """Logs the invite and joins the chat we were invited to.
         """
@@ -177,6 +192,7 @@ class User(object):
         self.groups.add_group(msg.body.steam_id_chat, msg.body.chat_name)
 
         self.join_chat(msg.body.steam_id_chat)
+
 
     def on_chat_message(self, msg):
         if msg.body.chat_entry_type == EChatEntryType.Typing:
@@ -195,6 +211,7 @@ class User(object):
                     plugin.private_chat_hook(msg.body.steamid_from,
                     msg.body.message.decode("utf-8").strip().strip('\x00'))
 
+
     def on_group_chat_msg(self, msg):
         groupname = str(self.groups.get_name(msg.body.steamIdChatRoom))
 
@@ -209,10 +226,12 @@ class User(object):
                 msg.body.steamIdChatter,
                 msg.body.text.decode("utf-8").strip().strip('\x00'))
 
+
     def on_chat_member_info(self, msg):
         to_log = ""
         if msg.body.chatAction == 0x01:
             to_log = "({}) {} ({}) entered the chat."
+            self.chats[msg.body.steamIdChat].append(msg.body.steamIdUserActedOn)
             for plugin in self.bot.plugins:
                 plugin.user_entered_hook(
                     msg.body.steamIdChat,
@@ -220,6 +239,7 @@ class User(object):
                 )
         elif msg.body.chatAction == 0x02:
             to_log = "({}) {} ({}) left the chat."
+            self.chats[msg.body.steamIdChat].remove(msg.body.steamIdUserActedOn)
             for plugin in self.bot.plugins:
                 plugin.user_left_hook(
                     msg.body.steamIdChat,
@@ -227,6 +247,7 @@ class User(object):
                 )
         elif msg.body.chatAction == 0x04:
             to_log = "({}) {} ({}) disconnected."
+            self.chats[msg.body.steamIdChat].remove(msg.body.steamIdUserActedOn)
             for plugin in self.bot.plugins:
                 plugin.user_left_hook(
                     msg.body.steamIdChat,
