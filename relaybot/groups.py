@@ -11,12 +11,16 @@ class Groups(object):
         self.init_db()
 
     def add_group(self, steamid, name):
-        self.db.insert("groups", "groupid, groupname", "?, ?",
-                       (
-                           steamid,
-                           name
-                       )
-        )
+        try:
+            self.db.insert("groups", "groupid, groupname", "?, ?",
+                           (
+                               steamid,
+                               name
+                           )
+            )
+        except sqlite3.IntegrityError:
+            # We can ignore accidental duplicates
+            pass
 
     def get_name(self, steamid):
         name =\
