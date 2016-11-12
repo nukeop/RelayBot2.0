@@ -22,7 +22,7 @@ class User(object):
     events sent from Steam servers.
     """
 
-    def __init__(self, bot, client):
+    def __init__(self, bot, groupsinst, client):
         logger.info("Creating a User instance")
 
         self.client = client
@@ -50,7 +50,7 @@ class User(object):
         self.client.on(EMsg.ClientChatMsg, self.on_group_chat_msg)
         self.client.on(EMsg.ClientChatMemberInfo, self.on_chat_member_info)
 
-        self.groups = groups.Groups(self.bot.database)
+        self.groups = groupsinst
 
         if self.client.relogin_available:
             self.client.relogin()

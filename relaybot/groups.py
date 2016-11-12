@@ -38,6 +38,6 @@ class Groups(object):
         logger.info("Creating groups table in the database")
         self.db.create_table("groups",
                              "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                             "groupid INTEGER NOT NULL,"
-                             "groupname TEXT NOT NULL"
+                             "groupid INTEGER UNIQUE NOT NULL,"
+                             "groupname TEXT UNIQUE NOT NULL"
         )

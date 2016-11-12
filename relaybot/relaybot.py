@@ -10,6 +10,8 @@ VERSION = (2, 0.4)
 logger = logging.getLogger()
 
 import database
+import errors
+import groups
 import plugins
 import user
 
@@ -21,6 +23,7 @@ class Bot(object):
     """
     def __init__(self, logfilename=None):
         self.configure_logging(logfilename)
+        errors.set_exception_handler()
         self.user = None
 
         self.database = database.Database('relaybot.db')
@@ -52,7 +55,10 @@ class Bot(object):
         """Performs initialization that needs to happen after the Bot object is
         constructed.
         """
-        self.user = user.User(self, steam.client.SteamClient())
+        self.user = user.User(self,
+                              groups.Groups(self.database),
+                              steam.client.SteamClient()
+        )
 
     def run(self):
         """Starts the main loop, handles logout on interrupt.
@@ -61,6 +67,7 @@ class Bot(object):
             self.user.client.run_forever()
         except KeyboardInterrupt:
             self.user.client.logout()
+            logger.info("Caught Ctrl-C, quitting")
 
     def configure_logging(self, logfilename=None):
         """Creates a root logger, configures it, and returns it.

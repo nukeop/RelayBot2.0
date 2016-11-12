@@ -28,6 +28,7 @@ class User_Tests(unittest.TestCase):
     def setUp(self):
         bot = mock.Mock()
         client = mock.Mock()
+        groups = mock.Mock()
 
         body = mock.Mock()
         body.persona_name = "RelayBot 2.0 Unit Test"
@@ -40,7 +41,7 @@ class User_Tests(unittest.TestCase):
 
         client.wait_event = fake_msg
 
-        self.user = relaybot.user.User(bot, client)
+        self.user = relaybot.user.User(bot, groups, client)
 
     @status
     def test_change_status(self):
@@ -66,3 +67,21 @@ class User_Tests(unittest.TestCase):
     def test_auth_code_prompt(self):
         self.user.auth_code_prompt(True, False)
         self.user.client.login.assert_called_once()
+
+
+class Database_Tests(unittest.TestCase):
+    def setUp(self):
+        self.sqlite3_mock = mock.MagicMock()
+
+        self.patcher = mock.patch.dict('sys.modules', {'sqlite3':self.sqlite3_mock})
+        self.patcher.start()
+
+        from relaybot.database import Database as RBDatabase
+        self.db = RBDatabase("test")
+
+    def tearDown(self):
+        self.patcher.stop()
+
+    @status
+    def selectTest(self):
+        self.db.select("test", "test1, test2")
