@@ -30,8 +30,7 @@ class YoutubePlugin(plugin.Plugin):
 
         reply = requests.get("http://youtube.com/get_video_info", params={
             "video_id": yt_id,
-            "el": "vevo",
-            "el": "embedded"
+            "el": ["vevo", "embedded"]
             })
 
         if reply.text:
