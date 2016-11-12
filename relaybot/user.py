@@ -215,16 +215,19 @@ class User(object):
     def on_group_chat_msg(self, msg):
         groupname = str(self.groups.get_name(msg.body.steamIdChatRoom))
 
-        logger.info("(Chatroom: {}) {}: {}".format(
-            groupname,
-            self.get_name_from_steamid(msg.body.steamIdChatter).encode('utf-8').strip(),
-            msg.body.text.strip().strip('\x00')))
 
-        for plugin in self.bot.plugins:
-            plugin.group_chat_hook(
-                msg.body.steamIdChatRoom,
-                msg.body.steamIdChatter,
-                msg.body.text.decode("utf-8").strip().strip('\x00'))
+         # Do not interact with ignored users - don't log either
+        if msg.body.steamid_from not in config["IGNORED_USERS"]:
+            logger.info("(Chatroom: {}) {}: {}".format(
+                groupname,
+                self.get_name_from_steamid(msg.body.steamIdChatter).encode('utf-8').strip(),
+                msg.body.text.strip().strip('\x00')))
+
+            for plugin in self.bot.plugins:
+                plugin.group_chat_hook(
+                    msg.body.steamIdChatRoom,
+                    msg.body.steamIdChatter,
+                    msg.body.text.decode("utf-8").strip().strip('\x00'))
 
 
     def on_chat_member_info(self, msg):
