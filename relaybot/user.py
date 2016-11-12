@@ -215,9 +215,8 @@ class User(object):
     def on_group_chat_msg(self, msg):
         groupname = str(self.groups.get_name(msg.body.steamIdChatRoom))
 
-
-         # Do not interact with ignored users - don't log either
-        if msg.body.steamid_from not in config["IGNORED_USERS"]:
+        # Do not interact with ignored users - don't log either
+        if msg.body.steamIdChatter not in config["IGNORED_USERS"]:
             logger.info("(Chatroom: {}) {}: {}".format(
                 groupname,
                 self.get_name_from_steamid(msg.body.steamIdChatter).encode('utf-8').strip(),
