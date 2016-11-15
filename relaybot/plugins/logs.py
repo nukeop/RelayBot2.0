@@ -46,7 +46,7 @@ class Logs(plugin.Plugin):
         self.loggers[steamid].info("({}) {}: {}".format(
             steamid,
             self.bot.user.get_name_from_steamid(steamid).encode('utf-8'),
-            message
+            message.encode('utf-8')
         ))
 
 
