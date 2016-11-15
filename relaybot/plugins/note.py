@@ -50,7 +50,7 @@ class Note(plugin.Plugin):
         records = sorted(records, key=lambda x: x[0])
         allrecords = "Your notes:\n\n"
         for i, r in enumerate(records):
-            allrecords += "{}. {}\n".format(i, r[1].encode('utf-8'))
+            allrecords += "{}. {}\n".format(i+1, r[1].encode('utf-8'))
         return allrecords
 
 
