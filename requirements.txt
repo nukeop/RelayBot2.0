@@ -15,3 +15,4 @@ steam
 github3.py
 mock
 twitter
+eventregistry
