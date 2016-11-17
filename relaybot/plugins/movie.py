@@ -27,11 +27,11 @@ class Movie(plugin.Plugin):
 
     def private_chat_hook(self, steamid, message):
         if message.startswith(self.command):
-            self.bot.user.send_msg(steamid, self.movie(' '.join(message[:-1].split(' ')[1:])))
+            self.bot.user.send_msg(steamid, self.movie(' '.join(message.split(' ')[1:])))
 
     def group_chat_hook(self, groupid, userid, message):
                 if message.startswith(self.command):
-                    self.bot.user.send_group_msg(groupid, self.movie(' '.join(message[:-1].split(' ')[1:])))
+                    self.bot.user.send_group_msg(groupid, self.movie(' '.join(message.split(' ')[1:])))
 
     def movie(self, title):
         if len(title) == 0:
