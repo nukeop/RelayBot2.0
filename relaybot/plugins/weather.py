@@ -10,7 +10,6 @@ class Weather(plugin.Plugin):
     def __init__(self, bot):
         super(Weather, self).__init__(bot)
         self.command = "!weather"
-        self.bot = bot
         self.apikey = config['PLUGINS']['OPENWEATHERMMAP_APIKEY']
 
     @property
