@@ -8,8 +8,8 @@ class Movie(plugin.Plugin):
     """Shows movie descriptions from imdb
     """
     def __init__(self, bot):
+        super(Movie, self).__init__(bot)
         self.command = "!movie"
-        self.bot = bot
 
     @property
     def description(self):
@@ -49,8 +49,8 @@ class Movie(plugin.Plugin):
             seasons = "Seasons: {}\n".format(parsed['totalSeasons'].encode('utf-8'))
 
         msg = "Title: {}\nYear: {}\nRuntime: {}\nGenre: {}\nCountry: {}\n{}Plot: {}"\
-            .format(parsed['Title'].encode('utf-8'), parsed['Year'].encode('utf-8'), parsed['Runtime'].encode('utf-8'),
-                    parsed['Genre'].encode('utf-8'), parsed['Country'].encode('utf-8'), seasons, parsed['Plot'].encode('utf-8'))
+            .format(parsed['Title'], parsed['Year'], parsed['Runtime'], parsed['Genre'],
+                    parsed['Country'], seasons, parsed['Plot']).encode('utf-8')
 
         return msg
 
