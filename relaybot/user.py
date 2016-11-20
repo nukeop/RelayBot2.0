@@ -2,7 +2,8 @@
 import steam.client
 import steam.client.builtins.friends
 
-from steam.core.msg import MsgProto, Msg, ClientChatMsg, ClientJoinChat
+from steam.core.msg import MsgProto, Msg
+from steam.core.msg.structs import ClientChatMsg, ClientJoinChat, ClientChatEnter
 from steam.enums import EResult, EPersonaState, EFriendRelationship
 from steam.enums import EChatEntryType
 from steam.enums.emsg import EMsg
@@ -32,8 +33,8 @@ class User(object):
             self.client)
 
         #This is a dictionary of group chats the bot is currently in
-        #The keys are steam ids of the groups, and the values are steam id of
-        #users in these group chats
+        #The keys are steam ids of the groups, and the values are lists of
+        #steam ids of users in these group chats
         #If there is a group chat id here, it means the bot is in the chat
         #(unless the ghost chat bug happens)
         self.chats = {}
@@ -49,6 +50,7 @@ class User(object):
         self.client.on(EMsg.ClientChatInvite, self.on_chat_invite)
         self.client.on(EMsg.ClientChatMsg, self.on_group_chat_msg)
         self.client.on(EMsg.ClientChatMemberInfo, self.on_chat_member_info)
+        self.client.on(EMsg.ClientChatEnter, self.on_chat_enter)
 
         self.groups = groupsinst
 
@@ -78,11 +80,51 @@ class User(object):
     def get_name_from_steamid(self, steamid):
         """Gets the profile name corresponding to a given steam id.
         """
-        suser = self.client.get_user(steamid, False)
+        suser = self.client.get_user(steamid)
         if suser.name is not None:
             return suser.name
         else:
             return "<unknown>"
+
+
+    def user_in_chat(self, groupid, steamid):
+        """Returns True if the bot is in the group chat of the group with
+        groupid, and the user with supplied steamid is also in that chat.
+        """
+        try:
+            return steamid in [x.steam_id for x in self.chats[groupid]]
+        except KeyError:
+            logger.warning("user_in_group: Bot currently not in queried group"
+                           " chat")
+            return False
+
+
+    def username_in_chat(self, groupid, username):
+        """Same as user_in_chat but looks for a name instead of a steam id.
+        """
+        try:
+            for user in self.chats[groupid]:
+                if user.name == username:
+                    return True
+        except KeyError:
+            logger.warning("username_in_group: Bot currently not in queried"
+                           " group chat")
+            return False
+
+
+    def username_to_steamid(self, groupid, username):
+        """Returns the steam id corresponding to the username (for users in a
+        particular group chat).
+        """
+        try:
+            for user in self.chats[groupid]:
+                if user.name == username:
+                    return user.steam_id
+
+        except KeyError:
+            logger.warning("username_in_group: Bot currently not in queried"
+                           " group chat")
+            return None
 
 
     def join_chat(self, chatroomid):
@@ -262,3 +304,23 @@ class User(object):
             msg.body.steamIdUserActedOn)
 
         logger.info(to_log)
+
+
+    def on_chat_enter(self, msg):
+
+        if msg.body.enterResponse != 1:
+            logger.info("Could not join chat {}({})".format(
+                msg.body.chatRoomName,
+                msg.body.steamIdChat))
+            return
+
+        logger.info("Entered group chat: {}({})".format(
+            msg.body.chatRoomName,
+            msg.body.steamIdChat))
+        self.chats[msg.body.steamIdChat] = []
+
+        for member in msg.body.memberList:
+            suser = self.client.get_user(member['steamid'])
+            self.chats[msg.body.steamIdChat].append(
+                suser
+            )
