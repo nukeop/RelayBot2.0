@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Relay Bot™ 2.0 - available commands</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  </head>
+
+  <body>
+    <div class="container">
+      <table class="table table-hover table-bordered">
+        <thead>
+          <tr>
+            <th>Command</th>
+            <th>Plugin</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr>
+            <td> !admin unignore [id] </td>
+              <td> AdminPlugin </td>
+              <td> removes a user from the list of ignored users in the config </td>
+          </tr>
+          <tr>
+            <td> !admin list </td>
+            <td> AdminPlugin </td>
+            <td> show authorized and ignored users </td>
+          </tr>
+          <tr>
+            <td> !admin unauthorize [id] </td>
+              <td> AdminPlugin </td>
+              <td> removes a user from the list of authorized users in the config </td>
+          </tr>
+          <tr>
+            <td> !admin eval [expression]</td>
+            <td> AdminPlugin </td>
+            <td> evaluate a python expression - dangerous </td>
+          </tr>
+          <tr>
+            <td> !admin authorize [id] </td>
+              <td> AdminPlugin </td>
+              <td> adds a user to the list of authorized users in config </td>
+          </tr>
+          <tr>
+            <td> !admin ignore [id] </td>
+              <td> AdminPlugin </td>
+              <td> adds a user to the list of ignored users in config </td>
+          </tr>
+          <tr>
+            <td> !ddg [term]</td>
+            <td> DuckDuckGoDefine </td>
+            <td> shows definitions from DuckDuckGo </td>
+          </tr>
+          <tr>
+            <td> !8ball </br> or !8ball [question]</td>
+            <td> EightBall </td>
+            <td> shows an answer to a yes/no question </td>
+          </tr>
+          <tr>
+            <td> !github commits </td>
+            <td> Github </td>
+            <td> see the last five commits to the main branch </td>
+          </tr>
+          <tr>
+            <td> !plugins </td>
+            <td> Help </td>
+            <td> shows a list of all plugins and their descriptions, or detailed info about a specific plugin </td>
+          </tr>
+          <tr>
+            <td> !help </td>
+            <td> Help </td>
+            <td> shows a list of commands </td>
+          </tr>
+          <tr>
+            <td> !addjoke [contents] </td>
+            <td> Joke </td>
+            <td> adds a new joke to the database </td>
+          </tr>
+          <tr>
+            <td> !joke </td>
+            <td> Joke </td>
+            <td> shows a random joke </td>
+          </tr>
+          <tr>
+            <td> !ratejoke [id] [score] </td>
+              <td> Joke </td>
+              <td> rates a joke from 0 to 5 stars </td>
+          </tr>
+          <tr>
+            <td> !addnote [contents]</td>
+            <td> Note </td>
+            <td> adds a new note </td>
+          </tr>
+          <tr>
+            <td> !shownote </td>
+            <td> Note </td>
+            <td> shows your notes </td>
+          </tr>
+          <tr>
+            <td> !spillthebeans [topic]</td>
+            <td> SpillTheBeans </td>
+            <td> shows recent news about any topic </td>
+          </tr>
+          <tr>
+            <td> !stock [symbol]</td>
+            <td> Stock </td>
+            <td> shows current stock value </td>
+          </tr>
+          <tr>
+            <td> !terminal [command]</td>
+            <td> Terminal </td>
+            <td> runs a shell command on the machine the bot is on </td>
+          </tr>
+          <tr>
+            <td> !trivia </td>
+            <td> Trivia </td>
+            <td> shows random trivia </td>
+          </tr>
+          <tr>
+            <td> !addtrivia [contents]</td>
+            <td> Trivia </td>
+            <td> adds a new piece of trivia to the database </td>
+          </tr>
+          <tr>
+            <td> !tweet [contents, max 140 characters minus the length of your nickname]</td>
+            <td> TweetPlugin </td>
+            <td> tweets whatever you send and signs it with your nickname </td>
+          </tr>
+          <tr>
+            <td> !urban [term]</td>
+            <td> UrbanDictionary </td>
+            <td> shows definitions from Urban Dictionary </td>
+          </tr>
+          <tr>
+            <td> !version </td>
+            <td> Version </td>
+            <td> shows program version and the latest changelog entry </td>
+          </tr>
+          <tr>
+            <td> !weather [location]</td>
+            <td> Weather </td>
+            <td> Shows basic weather conditions from OpenWeatherMap </td>
+          </tr>
+
+
+
+        </tbody>
+      </table>
+      </div>
+
+    </div>
+  </body>
+</html>
