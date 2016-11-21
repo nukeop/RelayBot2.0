@@ -39,6 +39,12 @@ class User(object):
         #(unless the ghost chat bug happens)
         self.chats = {}
 
+        #This is a dictionary storing information about user permissions as
+        #obtained after entering group chats. Keys are steam ids, values are
+        #lists of tuples where the first element is a groupid, and the second
+        #element is the permission flag.
+        self.permissions = {}
+
         self.bot = bot
 
         self.client.on('error', self.handle_errors)
@@ -134,6 +140,19 @@ class User(object):
         msg.body.steamIdChat = chatroomid
         self.client.send(msg)
         self.chats[chatroomid] = []
+
+
+    def leave_chat(self, chatroomid):
+        """Attempts to leave a group chat.
+        """
+        msg = Msg(EMsg.ClientChatMemberInfo, extended=True)
+        msg.body.steamIdChat = chatroomid
+        msg.body.type = 1 #StateChange
+        msg.body.chatAction = 0x02 #Left
+        msg.body.steamIdUserActedBy = self.client.steam_id
+        msg.body.steamIdUserActedOn = self.client.steam_id
+        self.client.send(msg)
+        del self.chats[chatroomid]
 
 
     def send_group_msg(self, chatroomid, msg):
@@ -324,3 +343,11 @@ class User(object):
             self.chats[msg.body.steamIdChat].append(
                 suser
             )
+
+            if self.permissions.get(member['steamid']) is None:
+                self.permissions[member['steamid']] = [(msg.body.steamIdChat,
+                                                       member['permissions'])]
+            else:
+                self.permissions[member['steamid']].append(
+                    (msg.body.steamIdChat, member['permissions'])
+                )
