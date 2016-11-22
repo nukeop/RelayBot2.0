@@ -1,10 +1,8 @@
+#-*- coding: utf-8 -*-
 import nose
 import mock
 import sys
 import unittest
-
-import relaybot.plugins.plugin
-import relaybot.user
 
 from nose.tools import assert_raises, assert_equal
 from steam.enums import EPersonaState
@@ -17,10 +15,6 @@ def status(fun):
 
 def sanity_test():
     assert True
-
-class Plugin_Tests(unittest.TestCase):
-
-    pass
 
 
 class User_Tests(unittest.TestCase):
@@ -41,6 +35,7 @@ class User_Tests(unittest.TestCase):
 
         client.wait_event = fake_msg
 
+        import relaybot.user
         self.user = relaybot.user.User(bot, groups, client)
 
     @status
@@ -50,13 +45,23 @@ class User_Tests(unittest.TestCase):
 
     @status
     def test_get_name_from_steamid(self):
-        def fake_get_user(steamid, val):
+        def fake_get_user(steamid):
             suser = mock.Mock()
             suser.name = "Test Username"
             return suser
         self.user.client.get_user = fake_get_user
 
         assert_equal(self.user.get_name_from_steamid(123456789), "Test Username")
+
+    @status
+    def test_get_name_from_steamid_failure(self):
+        def fake_get_user(steamid):
+            suser = mock.Mock()
+            suser.name = None
+            return suser
+        self.user.client.get_user = fake_get_user
+
+        assert_equal(self.user.get_name_from_steamid(123456789), "<unknown>")
 
     @status
     def test_send_msg(self):
@@ -73,15 +78,45 @@ class Database_Tests(unittest.TestCase):
     def setUp(self):
         self.sqlite3_mock = mock.MagicMock()
 
-        self.patcher = mock.patch.dict('sys.modules', {'sqlite3':self.sqlite3_mock})
-        self.patcher.start()
-
-        from relaybot.database import Database as RBDatabase
-        self.db = RBDatabase("test")
-
-    def tearDown(self):
-        self.patcher.stop()
+        with mock.patch.dict('sys.modules', {'sqlite3':self.sqlite3_mock}):
+            import relaybot.database
+            self.db = relaybot.database.Database("test")
 
     @status
-    def selectTest(self):
+    def test_select(self):
         self.db.select("test", "test1, test2")
+        self.db.cursor.execute.assert_called_with("SELECT test1, test2 FROM test")
+
+    @status
+    def test_select_condition(self):
+        self.db.select("test", "test1, test2", condition="test3")
+        self.db.cursor.execute.assert_called_with("SELECT test1, test2 FROM test WHERE test3")
+
+    @status
+    def test_create_table(self):
+        self.db.create_table("test", "test2")
+        self.db.cursor.execute.assert_called_with("CREATE TABLE test(test2)")
+        self.db.conn.commit.assert_called_once()
+
+    @status
+    def test_insert(self):
+        self.db.insert("test1", "test2", "test3", "test4")
+        self.db.cursor.execute.assert_called_with("INSERT INTO test1(test2) VALUES (test3)", "test4")
+        self.db.conn.commit.assert_called_once()
+
+
+class Util_Tests(unittest.TestCase):
+    @status
+    def test_rating_to_stars_full(self):
+        import relaybot.util
+        assert_equal(relaybot.util.rating_to_stars(5), "★★★★★")
+
+    @status
+    def test_rating_to_stars_notfull(self):
+        import relaybot.util
+        assert_equal(relaybot.util.rating_to_stars(3), "★★★☆☆")
+
+    @status
+    def test_rating_to_stars_empty(self):
+        import relaybot.util
+        assert_equal(relaybot.util.rating_to_stars(0), "☆☆☆☆☆")
