@@ -48,10 +48,13 @@ class EightBall(plugin.Plugin):
             "!8ball": "shows an answer to a yes/no question"
         }
 
+    def get_answer(self):
+        return random.choice(self.answers)
+
     def private_chat_hook(self, steamid, message):
         if message.startswith(self.command):
-            self.bot.user.send_msg(steamid, random.choice(self.answers))
+            self.bot.user.send_msg(steamid, self.get_answer())
 
     def group_chat_hook(self, groupid, userid, message):
         if message.startswith(self.command):
-            self.bot.user.send_group_msg(groupid, random.choice(self.answers))
+            self.bot.user.send_group_msg(groupid, self.get_answer())
