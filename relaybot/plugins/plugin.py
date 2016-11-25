@@ -49,7 +49,7 @@ class Plugin(object):
 
     def group_chat_hook(self, groupid, userid, message):
         """This will be registered and called whenever anyone sends a message
-        to a groupchat the bit is in.
+        to a groupchat the bot is in.
         It will receive the group id, the user's steamid and the sent message,
         in the future possibly also other arguments.
         """

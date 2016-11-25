@@ -3,3 +3,4 @@
 - Version 2.0.2: Twitter plugin. Users can now send tweets through Relay Bot's interface.
 - Version 2.0.3: Extended support for group chats, group chat versions of many plugins.
 - Version 2.0.4: Plugins and user class changed to work with what is now the official version of the steam library.
+- Version 2.0.5: New plugins including movies, spillthebeans (news), games, and version plugin for groups. Expanded tests.

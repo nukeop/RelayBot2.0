@@ -29,10 +29,19 @@ class Version(plugin.Plugin):
 
     def private_chat_hook(self, steamid, message):
         if message.startswith(self.command):
-            versionstr = "RelayBot v{}.{}".format(VERSION[0], VERSION[1])
-            with open('relaybot/changelog.md', 'r') as cl:
-                lines = cl.readlines()
-                versionstr += '\n'
-                versionstr += lines[-1]
+            self.bot.user.send_msg(steamid, self.get_version())
 
-            self.bot.user.send_msg(steamid, versionstr)
+
+    def group_chat_hook(self, groupid, userid, message):
+        if message.startswith(self.command):
+            self.bot.user.send_group_msg(groupid, self.get_version())
+
+
+    @staticmethod
+    def get_version():
+        versionstr = "RelayBot v{}.{}".format(VERSION[0], VERSION[1])
+        with open('relaybot/changelog.md', 'r') as cl:
+            lines = cl.readlines()
+            versionstr += '\n'
+            versionstr += lines[-1]
+        return versionstr
