@@ -32,3 +32,9 @@ class Database(object):
         query = "INSERT INTO {}({}) VALUES ({})".format(table, columns, values)
         self.cursor.execute(query, params)
         self.conn.commit()
+
+
+    def delete(self, table, condition):
+        query = "DELETE FROM {} WHERE {}".format(table, condition)
+        self.cursor.execute(query)
+        self.conn.commit()
