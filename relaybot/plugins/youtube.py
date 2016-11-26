@@ -25,8 +25,8 @@ class YoutubePlugin(plugin.Plugin):
         if self.yt_regex.search(message):
             self.bot.user.send_group_msg(groupid, self.get_video_info(message))
 
-    def
-    get_video_info(self, message):
+
+    def get_video_info(self, message):
         match = self.yt_regex.search(message)
         yt_id = match.group('ID')
 
@@ -45,6 +45,7 @@ class YoutubePlugin(plugin.Plugin):
             length = "{}:{}".format(length/60, length%60)
 
             return "{} | {} | {}".format(title, rating, length).decode('utf-8')
+
 
     @staticmethod
     def get_args(args, key, query):
