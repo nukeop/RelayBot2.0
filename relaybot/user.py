@@ -3,7 +3,7 @@ import steam.client
 import steam.client.builtins.friends
 
 from steam.core.msg import MsgProto, Msg
-from steam.core.msg.structs import ClientChatMsg, ClientJoinChat, ClientChatEnter
+from steam.core.msg.structs import ClientChatMsg, ClientJoinChat
 from steam.enums import EResult, EPersonaState, EFriendRelationship
 from steam.enums import EChatEntryType
 from steam.enums.emsg import EMsg
@@ -14,7 +14,6 @@ import time
 
 from config import config
 import groups
-import relaybot
 logger = logging.getLogger(__name__)
 
 
@@ -22,7 +21,6 @@ class User(object):
     """Handles interaction with Steam, including logging in and reacting to
     events sent from Steam servers.
     """
-
     def __init__(self, bot, groupsinst, client):
         logger.info("Creating a User instance")
 
@@ -176,6 +174,7 @@ class User(object):
         self.client.send(sendmsg)
 
 
+    @staticmethod
     def handle_errors(self, result):
         """Steam-related error callback.
         """
@@ -227,6 +226,7 @@ class User(object):
                 self.friends.add(friend.steam_id)
 
 
+    @staticmethod
     def on_friend_added(self, msg):
         """Informs about new friends being added, or shows any errors.
         """

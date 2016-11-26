@@ -35,6 +35,7 @@ class Bot(object):
             plugininst = plugin(self)
             self.plugins.append(plugininst)
 
+
     def import_plugins(self):
         logger.info("Scanning plugins...")
         files = os.listdir(os.path.join(os.path.dirname(__file__),
@@ -51,6 +52,7 @@ class Bot(object):
                 logger.error("Invalid plugin: %s", module)
                 logger.error(str(e))
 
+
     def initialize(self):
         """Performs initialization that needs to happen after the Bot object is
         constructed.
@@ -59,6 +61,7 @@ class Bot(object):
                               groups.Groups(self.database),
                               steam.client.SteamClient()
         )
+
 
     def run(self):
         """Starts the main loop, handles logout on interrupt.
@@ -69,7 +72,9 @@ class Bot(object):
             self.user.client.logout()
             logger.info("Caught Ctrl-C, quitting")
 
-    def configure_logging(self, logfilename=None):
+
+    @staticmethod
+    def configure_logging(logfilename=None):
         """Creates a root logger, configures it, and returns it.
         """
         root = logging.getLogger()
@@ -94,6 +99,7 @@ class Bot(object):
             root.addHandler(rfhandler)
 
         return root
+
 
 def main():
     """RelayBot 2.0 main entry point.

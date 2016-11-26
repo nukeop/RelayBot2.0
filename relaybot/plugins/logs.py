@@ -62,7 +62,8 @@ class Logs(plugin.Plugin):
         ))
 
 
-    def make_filename(self, name, steamid):
+    @staticmethod
+    def make_filename(name, steamid):
         filename = "{}_{}.log".format(
             steamid,
             ''.join([c for c in list(name) if c in string.ascii_letters or c in

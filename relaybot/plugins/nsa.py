@@ -5,6 +5,7 @@ import plugin
 
 SPOOK_URL = "https://github.com/emacs-mirror/emacs/raw/master/etc/spook.lines"
 
+
 class Nsa(plugin.Plugin):
     """Shows words from the spook file.
     """
@@ -53,7 +54,8 @@ class Nsa(plugin.Plugin):
             return self.get_words()
 
 
-    def init_words(self):
+    @staticmethod
+    def init_words():
         words = requests.get(SPOOK_URL).text.encode('utf-8')
         words = words.split('\x00')[1:]
 

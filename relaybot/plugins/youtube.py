@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
 import urllib
-import urlparse
 
 import requests
 
@@ -16,15 +15,18 @@ class YoutubePlugin(plugin.Plugin):
         super(YoutubePlugin, self).__init__(bot)
         self.yt_regex = re.compile("(((youtube.*(v=|\/v\/))|(youtu.be/))(?P<ID>[-_a-zA-Z0-9]+))")
 
+
     @property
     def description(self):
         return "Shows info about Youtube videos posted by users in group chat."
+
 
     def group_chat_hook(self, groupid, userid, message):
         if self.yt_regex.search(message):
             self.bot.user.send_group_msg(groupid, self.get_video_info(message))
 
-    def get_video_info(self, message):
+    def
+    get_video_info(self, message):
         match = self.yt_regex.search(message)
         yt_id = match.group('ID')
 
@@ -44,7 +46,8 @@ class YoutubePlugin(plugin.Plugin):
 
             return "{} | {} | {}".format(title, rating, length).decode('utf-8')
 
-    def get_args(self, args, key, query):
+    @staticmethod
+    def get_args(args, key, query):
         args = args.encode('utf-8')
         try:
             iqs = args.index(query)

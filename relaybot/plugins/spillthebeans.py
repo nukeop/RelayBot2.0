@@ -1,8 +1,6 @@
 import datetime
-import json
 import time
 
-import requests
 from eventregistry import *
 
 import plugin

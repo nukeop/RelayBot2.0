@@ -1,6 +1,5 @@
 import json
 import logging
-import os
 
 from config import config, config_path
 import plugin
@@ -116,6 +115,7 @@ class AdminPlugin(plugin.Plugin):
         config[key].remove(steamid)
         self.save_config()
 
+
     def list_from(self, key):
         msg = '\n'.join(["{}"
                          " ({})".format(self.bot.user.get_name_from_steamid(x),
@@ -125,7 +125,8 @@ class AdminPlugin(plugin.Plugin):
         return msg
 
 
-    def save_config(self):
+    @staticmethod
+    def save_config():
         configstr = json.dumps(config, indent=4, sort_keys=True)
         with open(config_path, 'w') as config_file:
             config_file.write(configstr)

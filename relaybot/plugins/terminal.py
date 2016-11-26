@@ -4,7 +4,6 @@ import subprocess
 
 from config import config
 import plugin
-import relaybot
 logger = logging.getLogger(__name__)
 
 class Terminal(plugin.Plugin):

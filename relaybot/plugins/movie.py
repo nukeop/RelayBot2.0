@@ -11,13 +11,16 @@ class Movie(plugin.Plugin):
         super(Movie, self).__init__(bot)
         self.command = "!movie"
 
+
     @property
     def description(self):
         return "Shows movie information about a movie from imdb"
 
+
     @property
     def long_desc(self):
         return "!movie <title> - show movie information about a movie from imdb"
+
 
     @property
     def commands(self):
@@ -25,15 +28,19 @@ class Movie(plugin.Plugin):
             "!movie": "Shows movie information about a movie from imdb"
         }
 
+
     def private_chat_hook(self, steamid, message):
         if message.startswith(self.command):
             self.bot.user.send_msg(steamid, self.movie(' '.join(message.split(' ')[1:])))
+
 
     def group_chat_hook(self, groupid, userid, message):
                 if message.startswith(self.command):
                     self.bot.user.send_group_msg(groupid, self.movie(' '.join(message.split(' ')[1:])))
 
-    def movie(self, title):
+
+    @staticmethod
+    def movie(title):
         if len(title) == 0:
             return "Please enter a movie title"
 
