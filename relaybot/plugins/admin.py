@@ -56,7 +56,7 @@ class AdminPlugin(plugin.Plugin):
                         self.add_to(int(args[2]), "IGNORED_USERS")
                         self.bot.user.send_msg(steamid, "User {}"
                                                " ignored.".format(args[2]))
-                    except:
+                    except ValueError:
                         self.bot.user.send_msg(steamid, "Invalid Steam id.")
                 elif args[1] == "authorize":
                     try:

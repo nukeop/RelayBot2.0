@@ -3,7 +3,7 @@ import steam.client
 import steam.client.builtins.friends
 
 from steam.core.msg import MsgProto, Msg
-from steam.core.msg.structs import ClientChatMsg, ClientJoinChat
+from steam.core.msg.structs import ClientChatMsg
 from steam.enums import EResult, EPersonaState, EFriendRelationship
 from steam.enums import EChatEntryType
 from steam.enums.emsg import EMsg
@@ -13,7 +13,6 @@ import os
 import time
 
 from config import config
-import groups
 logger = logging.getLogger(__name__)
 
 

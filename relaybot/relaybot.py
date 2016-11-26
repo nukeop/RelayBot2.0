@@ -36,7 +36,8 @@ class Bot(object):
             self.plugins.append(plugininst)
 
 
-    def import_plugins(self):
+    @staticmethod
+    def import_plugins():
         logger.info("Scanning plugins...")
         files = os.listdir(os.path.join(os.path.dirname(__file__),
                                         plugins.__name__))

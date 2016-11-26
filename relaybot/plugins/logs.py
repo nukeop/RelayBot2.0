@@ -18,12 +18,12 @@ class Logs(plugin.Plugin):
 
         try:
             os.makedirs(self.friend_logs_path)
-        except:
+        except OSError:
             logger.error("Could not create {}".format(self.friend_logs_path))
 
         try:
             os.makedirs(self.group_logs_path)
-        except:
+        except OSError:
             logger.error("Could not create {}".format(self.group_logs_path))
 
 

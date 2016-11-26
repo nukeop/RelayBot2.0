@@ -41,7 +41,7 @@ class LeavePlugin(plugin.Plugin):
             groupid = message.split()[1]
             try:
                 self.bot.user.leave_chat(int(groupid))
-            except:
+            except ValueError:
                 self.bot.user.send_msg(steamid, "Invalid group id.")
 
 
