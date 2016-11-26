@@ -63,7 +63,7 @@ class AdminPlugin(plugin.Plugin):
                         self.add_to(int(args[2]), "AUTHORIZED_USERS")
                         self.bot.user.send_msg(steamid, "User {}"
                                                " authorized.".format(args[2]))
-                    except:
+                    except ValueError:
                         self.bot.user.send_msg(steamid, "Invalid Steam id.")
                 elif args[1] == "unignore":
                     try:

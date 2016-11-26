@@ -3,7 +3,6 @@ import steam.client
 import steam.client.builtins.friends
 
 from steam.core.msg import MsgProto, Msg
-from steam.core.msg.structs import ClientChatMsg
 from steam.enums import EResult, EPersonaState, EFriendRelationship
 from steam.enums import EChatEntryType
 from steam.enums.emsg import EMsg
