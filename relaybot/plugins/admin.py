@@ -1,7 +1,7 @@
 import json
 import logging
 
-from config import config, config_path
+import config
 import plugin
 
 logger = logging.getLogger(__name__)
@@ -44,7 +44,7 @@ class AdminPlugin(plugin.Plugin):
     def private_chat_hook(self, steamid, message):
         if message.startswith(self.command):
 
-            if not steamid in config["AUTHORIZED_USERS"]:
+            if not steamid in config.config["AUTHORIZED_USERS"]:
                 self.bot.user.send_msg(steamid, "Unauthorized user. Access"
                                        " denied.")
                 return
@@ -53,21 +53,21 @@ class AdminPlugin(plugin.Plugin):
             if len(args) > 1:
                 if args[1] == "ignore":
                     try:
-                        self.add_to(int(args[2]), "IGNORED_USERS")
+                        config.add_to(int(args[2]), "IGNORED_USERS")
                         self.bot.user.send_msg(steamid, "User {}"
                                                " ignored.".format(args[2]))
                     except ValueError:
-                        self.bot.user.send_msg(steamid, "Invalid Steam id.")
+                        config.bot.user.send_msg(steamid, "Invalid Steam id.")
                 elif args[1] == "authorize":
                     try:
-                        self.add_to(int(args[2]), "AUTHORIZED_USERS")
+                        config.add_to(int(args[2]), "AUTHORIZED_USERS")
                         self.bot.user.send_msg(steamid, "User {}"
                                                " authorized.".format(args[2]))
                     except ValueError:
                         self.bot.user.send_msg(steamid, "Invalid Steam id.")
                 elif args[1] == "unignore":
                     try:
-                        self.remove_from(int(args[2]), "IGNORED_USERS")
+                        config.remove_from(int(args[2]), "IGNORED_USERS")
                         self.bot.user.send_msg(
                             steamid,
                             "User {} removed from ignore list.".format(args[2])
@@ -79,7 +79,7 @@ class AdminPlugin(plugin.Plugin):
                                                " ignore list.".format(args[2]))
                 elif args[1] == "unauthorize":
                     try:
-                        self.remove_from(int(args[2]), "AUTHORIZED_USERS")
+                        config.remove_from(int(args[2]), "AUTHORIZED_USERS")
                         self.bot.user.send_msg(
                             steamid,
                             "User {} removed from authorized"
@@ -106,27 +106,10 @@ class AdminPlugin(plugin.Plugin):
                         self.bot.user.send_msg(steamid, "Command triggered an exception: \n{}".format(str(e)))
 
 
-    def add_to(self, steamid, key):
-        config[key].append(steamid)
-        self.save_config()
-
-
-    def remove_from(self, steamid, key):
-        config[key].remove(steamid)
-        self.save_config()
-
-
     def list_from(self, key):
         msg = '\n'.join(["{}"
                          " ({})".format(self.bot.user.get_name_from_steamid(x),
-                                        x) for x in config[key]])
+                                        x) for x in config.config[key]])
         if msg == []:
             return ""
         return msg
-
-
-    @staticmethod
-    def save_config():
-        configstr = json.dumps(config, indent=4, sort_keys=True)
-        with open(config_path, 'w') as config_file:
-            config_file.write(configstr)

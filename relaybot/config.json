@@ -1,20 +1,18 @@
 {
-    "AUTHORIZED_USERS": [
-        
-    ], 
-    "IGNORED_USERS": [
-        
-    ], 
+    "AUTHORIZED_USERS": [], 
+    "AUTOJOIN": [], 
+    "IGNORED_USERS": [], 
     "PLUGINS": {
         "GITHUB_PASSW": "", 
         "GITHUB_USER": "", 
+        "OPENWEATHERMMAP_APIKEY": "", 
         "RELAYBOT_REPO": "Relaybot2.0", 
         "TWITTER_ASECRET": "", 
         "TWITTER_ATOKEN": "", 
         "TWITTER_CKEY": "", 
-        "TWITTER_CSECRET": "",
-        "OPENWEATHERMMAP_APIKEY": ""
+        "TWITTER_CSECRET": ""
     }, 
+    "SILENCED": [], 
     "STEAM_API_KEY": "", 
     "STEAM_PROFILE_NAME": "RelayBot 2.0\u2122", 
     "STEAM_PWD": "", 

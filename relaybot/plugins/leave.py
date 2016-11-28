@@ -1,4 +1,5 @@
 import plugin
+import util
 from config import config
 
 class LeavePlugin(plugin.Plugin):
@@ -49,15 +50,10 @@ class LeavePlugin(plugin.Plugin):
         if message.startswith(self.command):
             #ignore command if issued by a non-admin or regular member
             if not (userid in config["AUTHORIZED_USERS"] or
-                    self.has_authority(userid, groupid)):
+                    util.has_authority(self.bot, userid, groupid)):
                 return
 
             self.bot.user.leave_chat(groupid)
 
 
-    def has_authority(self, userid, groupid):
-        """Checks if the user has a rank higher than Member in a given group
-        """
-        permissions = [x for x in self.bot.user.permissions[userid] if x[0] ==
-                       groupid][0][1]
-        return (permissions & 3) != 0 #3 bit flag represents owner or officer`
+

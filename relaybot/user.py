@@ -67,6 +67,11 @@ class User(object):
         logger.info("Logged in as %s", msg[0].body.persona_name)
         logger.info("SteamID: %s", repr(self.client.steam_id))
 
+        for groupid in config["AUTOJOIN"]:
+            logger.info("Autojoining group:"
+            " {}({})".format(self.groups.get_name(groupid), groupid))
+            self.join_chat(groupid)
+
 
     def change_status(self, persona_state, player_name):
         """Changes user's status according to passed value.
@@ -152,6 +157,10 @@ class User(object):
 
 
     def send_group_msg(self, chatroomid, msg):
+        #don't send if we're silenced in this group
+        if chatroomid in config["SILENCED"]:
+            return
+
         m = Msg(EMsg.ClientChatMsg, extended=True)
         m.body.steamIdChatter = self.client.steam_id.as_64
         m.body.steamIdChatRoom = chatroomid
