@@ -4,3 +4,4 @@
 - Version 2.0.3: Extended support for group chats, group chat versions of many plugins.
 - Version 2.0.4: Plugins and user class changed to work with what is now the official version of the steam library.
 - Version 2.0.5: New plugins including movies, spillthebeans (news), games, and version plugin for groups. Expanded tests.
+- Version 2.0.6: All planned plugins present. Release-ready version.
