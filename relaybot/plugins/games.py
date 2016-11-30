@@ -62,10 +62,10 @@ class Games(plugin.Plugin):
         if reply['response']['total_count'] == 0:
             return "{} hasn't played any games recently.".format(username)
 
-        games = ["{}'s stats:".format(username)]
+        games = ["{}'s stats:".format(username.encode('utf-8'))]
         for game in reply['response']['games']:
             games.append("{}, last 2 weeks: {}, total: {}".format(
-                game['name'],
+                game['name'].encode('utf-8'),
                 "{} hrs {} min".format(
                     *util.minutes_to_hours(game['playtime_2weeks'])
                 ),
