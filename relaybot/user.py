@@ -288,7 +288,7 @@ class User(object):
             logger.info("(Chatroom: {}) {}: {}".format(
                 groupname,
                 self.get_name_from_steamid(msg.body.steamIdChatter).encode('utf-8').strip(),
-                msg.body.text.strip().strip('\x00')))
+                msg.body.text.encode('utf-8').strip().strip('\x00')))
 
             for plugin in self.bot.plugins:
                 plugin.group_chat_hook(
@@ -301,7 +301,12 @@ class User(object):
         to_log = ""
         if msg.body.chatAction == 0x01:
             to_log = "({}) {} ({}) entered the chat."
-            self.chats[msg.body.steamIdChat].append(msg.body.steamIdUserActedOn)
+            self.chats[msg.body.steamIdChat].append(
+                steam.client.user.SteamUser(
+                    msg.body.steamIdUserActedOn,
+                    self.client
+                )
+            )
             for plugin in self.bot.plugins:
                 plugin.user_entered_hook(
                     msg.body.steamIdChat,
