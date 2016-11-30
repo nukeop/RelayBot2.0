@@ -46,7 +46,7 @@ class Games(plugin.Plugin):
         steamid = self.bot.user.username_to_steamid(groupid, username)
 
         if not steamid:
-            return "Unknown user {}.".format(username)
+            return "Unknown user {}.".format(username.encode('utf-8'))
 
         params = {
             'key': config['STEAM_API_KEY'],
@@ -57,15 +57,15 @@ class Games(plugin.Plugin):
         reply = json.loads(requests.get(PLAYER_API_URL, params=params).text)
 
         if len(reply['response']) == 0:
-            return "{}'s profile is private.".format(username)
+            return "{}'s profile is private.".format(username.encode('utf-8'))
 
         if reply['response']['total_count'] == 0:
-            return "{} hasn't played any games recently.".format(username)
+            return "{} hasn't played any games recently.".format(username.encode('utf-8'))
 
-        games = ["{}'s stats:".format(username)]
+        games = ["{}'s stats:".format(username.encode('utf-8'))]
         for game in reply['response']['games']:
             games.append("{}, last 2 weeks: {}, total: {}".format(
-                game['name'],
+                game['name'].encode('utf-8'),
                 "{} hrs {} min".format(
                     *util.minutes_to_hours(game['playtime_2weeks'])
                 ),

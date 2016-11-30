@@ -58,7 +58,7 @@ class Logs(plugin.Plugin):
             self.bot.user.groups.get_name(groupid),
             userid,
             self.bot.user.get_name_from_steamid(userid).encode('utf-8'),
-            message
+            message.encode('utf-8')
         ))
 
 

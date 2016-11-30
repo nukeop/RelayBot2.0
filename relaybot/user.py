@@ -165,7 +165,7 @@ class User(object):
         m.body.steamIdChatter = self.client.steam_id.as_64
         m.body.steamIdChatRoom = chatroomid
         m.body.ChatMsgType = 1
-        m.body.text = msg
+        m.body.text = msg.decode('utf-8')
         self.client.send(m)
 
 
@@ -294,7 +294,7 @@ class User(object):
                 plugin.group_chat_hook(
                     msg.body.steamIdChatRoom,
                     msg.body.steamIdChatter,
-                    msg.body.text.decode("utf-8").strip().strip('\x00'))
+                    msg.body.text.strip().strip('\x00'))
 
 
     def on_chat_member_info(self, msg):
