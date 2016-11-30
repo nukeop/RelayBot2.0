@@ -336,12 +336,12 @@ class User(object):
 
         if msg.body.enterResponse != 1:
             logger.info("Could not join chat {}({})".format(
-                msg.body.chatRoomName,
+                msg.body.chatRoomName.encode('utf-8'),
                 msg.body.steamIdChat))
             return
 
         logger.info("Entered group chat: {}({})".format(
-            msg.body.chatRoomName,
+            msg.body.chatRoomName.encode('utf-8'),
             msg.body.steamIdChat))
         self.chats[msg.body.steamIdChat] = []
 
