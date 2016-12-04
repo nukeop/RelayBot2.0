@@ -23,7 +23,7 @@ class YoutubePlugin(plugin.Plugin):
 
     def group_chat_hook(self, groupid, userid, message):
         if self.yt_regex.search(message):
-            self.bot.user.send_group_msg(groupid, self.get_video_info(message))
+            self.bot.user.send_group_msg(groupid, self.get_video_info(message).encode('utf-8'))
 
 
     def get_video_info(self, message):

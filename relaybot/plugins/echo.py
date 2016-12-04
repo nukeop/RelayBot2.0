@@ -40,12 +40,12 @@ class Echo(plugin.Plugin):
     def private_chat_hook(self, steamid, message):
         if message.startswith(self.command):
             self.bot.user.send_msg(steamid, self.reply(steamid, message))
-        elif self.echo_users[steamid] is not None:
+        elif self.echo_users.get(steamid) is not None:
             self.bot.user.send_group_msg(
                 self.echo_users[steamid],
                 "{}: {}".format(
-                    self.bot.user.get_name_from_steamid(steamid),
-                    message
+                    self.bot.user.get_name_from_steamid(steamid).encode('utf-8'),
+                    message.encode('utf-8')
                 )
             )
 
@@ -56,8 +56,8 @@ class Echo(plugin.Plugin):
                 self.bot.user.send_msg(
                     k,
                     "{}: {}".format(
-                        self.bot.user.get_name_from_steamid(userid),
-                        message
+                        self.bot.user.get_name_from_steamid(userid).encode('utf-8'),
+                        message.encode('utf-8')
                     )
                 )
 
