@@ -61,7 +61,7 @@ class Trivia(plugin.Plugin):
             row = random.choice(rows)
 
             return ("User {} shared the following piece of"
-                    " trivia:\n\n{}".format(row[2], row[1]))
+                    " trivia:\n\n{}".format(row[2], row[1]).encode('utf-8'))
 
 
     def add_trivia(self, steamid, message):
