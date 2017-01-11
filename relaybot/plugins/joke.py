@@ -62,7 +62,7 @@ class Joke(plugin.Plugin):
             rating = util.rating_to_stars(rating)
 
             return ("Joke #{} by {} ({}):\n"
-            "{}".format(row[0], row[2], rating, row[1]).encode('utf-8'))
+            "{}".format(row[0], row[2], rating, row[1]))
 
     def add_joke(self, steamid, message):
         tokens = message.split()
