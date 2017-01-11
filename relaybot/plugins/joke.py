@@ -110,7 +110,7 @@ class Joke(plugin.Plugin):
 
     def group_chat_hook(self, groupid, userid, message):
         if message.startswith(self.use_command):
-            self.bot.user.send_group_msg(groupid, self.get_joke().decode('utf-8'))
+            self.bot.user.send_group_msg(groupid, self.get_joke())
         elif message.startswith(self.add_command):
             self.bot.user.send_group_msg(groupid, self.add_joke(userid, message))
         elif message.startswith(self.rate_command):
